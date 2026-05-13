@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const GROQ_KEY = "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";
+    const API_BASE = 'http://localhost:3005/api';
     const WEATHER_KEY = ""; // Optional: OpenWeatherMap free key
 
     const form = document.getElementById('calendar-form');
@@ -215,26 +215,16 @@ IMPORTANT RULES:
 - Factor in the ${soil} soil type and ${irrigation} irrigation availability
 - Make each task hyper-specific with quantities (kg/acre, mm/day, etc.)`;
 
-            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            const response = await fetch(`${API_BASE}/ai/groq`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${GROQ_KEY}`
-                },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    response_format: { type: "json_object" },
-                    messages: [
-                        { role: "system", content: "You are a precision agriculture calendar AI. You output valid JSON only." },
-                        { role: "user", content: prompt }
-                    ]
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
             });
 
             const rawData = await response.json();
-            if (!rawData.choices) throw new Error("Invalid API response");
+            if (!rawData.result) throw new Error("Invalid API response");
 
-            const data = JSON.parse(rawData.choices[0].message.content);
+            const data = rawData.result;
 
             // Populate Weather
             weatherTemp.textContent = data.weather?.temp || '--';
@@ -274,7 +264,8 @@ IMPORTANT RULES:
 
         } catch (error) {
             console.error("Groq Calendar Error:", error);
-            alertsContainer.innerHTML = `<div class="alert-urgent rounded-xl px-4 py-3"><p class="text-xs font-bold text-red-800">🔴 Error generating calendar. Check your Groq API key or network connection. Details: ${error.message}</p></div>`;
+            F3Toast.error('Calendar generation failed. Please check your connection.');
+            alertsContainer.innerHTML = `<div class="alert-urgent rounded-xl px-4 py-3"><p class="text-xs font-bold text-red-800">🔴 Error: ${error.message}</p></div>`;
             timelineContainer.innerHTML = '';
         } finally {
             generateBtn.innerHTML = oldText;

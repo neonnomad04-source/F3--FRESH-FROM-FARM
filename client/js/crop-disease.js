@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Groq API Key (Validated)
-    const API_KEY = "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";
+    const API_BASE = 'http://localhost:3005/api';
 
     const form = document.getElementById('disease-form');
     const imageInput = document.getElementById('crop-image');
@@ -97,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         if (!imageInput.files || imageInput.files.length === 0) {
-            alert("Please upload a crop image to enable the AI vision-logic layer.");
+            F3Toast.warning('Please upload a crop image to enable the AI diagnosis.');
             return;
         }
 
@@ -149,24 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
               "weatherAdvice": "Weather mitigation"
             }`;
 
-            const response = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
+            const response = await fetch(`${API_BASE}/ai/groq`, {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    response_format: { type: "json_object" },
-                    messages: [
-                        { role: "system", content: "You are a specialized Agronomy API. Output strict JSON only." },
-                        { role: "user", content: prompt }
-                    ]
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
             });
 
             const rawData = await response.json();
-            const data = JSON.parse(rawData.choices[0].message.content);
+            const data = rawData.result;
 
             // Populate Results with "Scanning" feel
             resName.textContent = data.diseaseName;
@@ -208,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error("Diagnostic Error:", error);
-            alert("The AI Intelligence Engine is currently overwhelmed or missing credentials. Please verify your Groq API Key.");
+            F3Toast.error('AI Diagnostic Engine failed. Please try again.');
         } finally {
             btn.innerHTML = oldText;
             btn.disabled = false;

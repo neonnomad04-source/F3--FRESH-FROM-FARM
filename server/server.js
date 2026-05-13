@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { initializeApp } from 'firebase/app';
+import aiRouter from './routes/ai.js';
 import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, getDoc, query, orderBy, where, serverTimestamp } from 'firebase/firestore';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +15,9 @@ const port = process.env.PORT || 3005;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// AI Routes (Groq proxy — key stays server-side)
+app.use('/api/ai', aiRouter);
 
 // Firebase Configuration & Initialization
 const firebaseConfig = {

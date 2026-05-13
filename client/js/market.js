@@ -199,7 +199,10 @@ function saveCart() {
 function toggleCheckoutModal() {
     const modal = document.getElementById('checkout-modal');
     if (modal.classList.contains('hidden')) {
-        if (cart.length === 0) return alert('Your basket is empty!');
+        if (cart.length === 0) {
+            F3Toast.warning('Your basket is empty! Add items first.');
+            return;
+        }
         modal.classList.remove('hidden');
         gotoCheckoutStep(1);
     } else {
@@ -260,7 +263,7 @@ async function checkout() {
     const address = document.getElementById('ship-address').value;
 
     if (!phone || !address) {
-        alert('Please fill in your shipping details.');
+        F3Toast.warning('Please fill in your shipping details.');
         return gotoCheckoutStep(1);
     }
 
@@ -286,16 +289,21 @@ async function checkout() {
         });
 
         await Promise.all(orderPromises);
-        alert('🔥 Transaction Successful! Your order has been registered in the Firebase cloud.');
+        F3Toast.success('Order placed! 🎉 Check My Orders for status.');
         cart = [];
         saveCart();
         updateCartUI();
         toggleCheckoutModal();
         toggleCartModal();
         switchMarketSubView('orders');
+        // Generate dynamic QR for UPI if selected
+        if (selectedPaymentMethod === 'upi') {
+            const total = cart.reduce ? 0 : 0; // cart already cleared, total shown before
+            generateQR(total);
+        }
     } catch (err) {
         console.error('Firebase Checkout Error:', err);
-        alert('Checkout failed. Please check your network or Firebase permissions.');
+        F3Toast.error('Checkout failed. Please check your network connection.');
     } finally {
         btn.disabled = false;
         btn.innerText = 'Order Now';
@@ -404,6 +412,33 @@ window.setPaymentMethod = setPaymentMethod;
 window.addToCart = addToCart;
 window.removeFromCart = removeFromCart;
 window.checkout = checkout;
+
+// ========================================
+// Dynamic QR Code Generator (UPI)
+// ========================================
+function generateQR(amount = 0) {
+    const canvas = document.getElementById('upi-qr-canvas');
+    if (!canvas) return;
+    const upiId = 'f3freshfromfarm@upi';
+    const name = 'F3 Fresh From Farm';
+    const upiString = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+    if (typeof QRCode !== 'undefined') {
+        QRCode.toCanvas(canvas, upiString, { width: 180, margin: 2, color: { dark: '#2B1B0E', light: '#FFFDF7' } });
+    }
+}
+
+// Generate QR when UPI payment selected
+document.addEventListener('DOMContentLoaded', () => {
+    const upiBtn = document.getElementById('pay-upi-btn');
+    if (upiBtn) {
+        upiBtn.addEventListener('click', () => {
+            const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+            setTimeout(() => generateQR(total), 100);
+        });
+    }
+});
+
+window.generateQR = generateQR;
 window.loadOrders = loadOrders;
 window.showProductDetails = (name, cat, price, img) => {
     document.getElementById('detail-title').innerText = name;

@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // IMPORTANT: Replace this with your actual Groq API Key (starts with gsk_)
-    const API_KEY = "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";
+    const API_BASE = 'http://localhost:3005/api';
 
     const form = document.getElementById('soil-form');
     const results = document.getElementById('results-container');
@@ -113,27 +112,16 @@ Respond specifically in valid JSON format. Provide these EXACT keys:
 }
 Make sure the 'crops' array always contains exactly 3 crop suggestions best suited for this environment. 'match' must be a number.`;
 
-            // Using official Groq OpenAI-compatible endpoint
-            const response = await fetch(`https://api.groq.com/openai/v1/chat/completions`, {
+            const response = await fetch(`${API_BASE}/ai/groq`, {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`
-                },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    response_format: { type: "json_object" },
-                    messages: [
-                        { role: "system", content: "You output JSON strictly." },
-                        { role: "user", content: prompt }
-                    ]
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt })
             });
 
             const rawData = await response.json();
-            if(!rawData.choices) throw new Error("Invalid API response format");
+            if (!rawData.result) throw new Error("Invalid API response format");
 
-            const data = JSON.parse(rawData.choices[0].message.content);
+            const data = rawData.result;
 
             // Populate Groq AI Data
             scoreSummary.textContent = data.summary;
@@ -168,7 +156,8 @@ Make sure the 'crops' array always contains exactly 3 crop suggestions best suit
 
         } catch (error) {
             console.error("Groq API Error:", error);
-            alert("Error generating authentic AI response via Groq. Did you add the API Key?");
+            F3Toast.error('AI analysis failed. Please try again.');
+            scoreSummary.textContent = 'Analysis failed. Check your connection.';
         } finally {
             btn.innerHTML = oldText;
             btn.disabled = false;

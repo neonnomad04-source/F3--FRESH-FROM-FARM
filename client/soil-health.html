@@ -30,10 +30,35 @@
     <link rel="stylesheet" href="./css/theme.css">
     <style>
         .soil-input {
-            @apply w-full px-8 py-5 rounded-[2rem] bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 outline-none focus:ring-4 focus:ring-agri-gold/10 transition-all font-black text-sm;
+            width: 100%;
+            padding: 1.25rem 2rem;
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.06);
+            border: 1.5px solid rgba(255,255,255,0.08);
+            outline: none;
+            font-weight: 800;
+            font-size: 0.875rem;
+            color: #FFF9E5;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+        }
+        .soil-input::placeholder {
+            color: rgba(255,255,255,0.25);
+        }
+        .soil-input:focus {
+            border-color: rgba(212,160,23,0.5);
+            box-shadow: 0 0 0 4px rgba(212,160,23,0.08);
+            background: rgba(255,255,255,0.09);
         }
         .soil-label {
-            @apply text-[10px] font-black uppercase tracking-widest text-agri-gold ml-4 mb-2 block;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #D4A017;
+            margin-left: 1rem;
+            margin-bottom: 0.5rem;
+            display: block;
         }
     </style>
 </head>

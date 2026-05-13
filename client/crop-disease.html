@@ -30,7 +30,22 @@
     <link rel="stylesheet" href="./css/theme.css">
     <style>
         .input-field {
-            @apply w-full px-6 py-4 rounded-2xl border border-slate-100 bg-slate-50/50 outline-none focus:border-agri-gold focus:bg-white focus:ring-4 focus:ring-agri-gold/5 transition-all text-sm font-bold dark:bg-slate-800/50 dark:border-white/5 dark:text-white;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            border: 1.5px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.06);
+            outline: none;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #FFF9E5;
+            transition: all 0.2s ease;
+        }
+        .input-field::placeholder { color: rgba(255,255,255,0.25); }
+        .input-field:focus {
+            border-color: rgba(212,160,23,0.5);
+            box-shadow: 0 0 0 3px rgba(212,160,23,0.08);
+            background: rgba(255,255,255,0.09);
         }
 
         .blob {

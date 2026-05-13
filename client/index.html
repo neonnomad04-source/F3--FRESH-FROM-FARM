@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F3: Fresh From Farm | Direct Agriculture Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'agri-dark': '#2B1B0E',
+                        'agri-gold': '#D4A017',
+                        'agri-secondary': '#FFB800',
+                        'agri-cream': '#FFF9E5',
+                        'agri-light': '#fdfcfb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Noto Serif', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="./css/theme.css">
+    <style>
+        .hero-bg {
+            background-image: linear-gradient(rgba(43, 27, 14, 0.8), rgba(43, 27, 14, 0.4)), url('./assets/hero_background_agriculture_1771235574013.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .role-btn {
+            @apply flex flex-col items-center gap-3 p-6 rounded-[2rem] border-2 border-slate-100 bg-white/50 backdrop-blur-sm transition-all duration-500 hover:border-agri-gold/50 hover:-translate-y-1 relative;
+        }
+
+        .role-btn.active {
+            @apply border-agri-gold bg-agri-gold/10 shadow-2xl shadow-agri-gold/20 -translate-y-1 scale-105;
+            box-shadow: 0 0 25px rgba(212, 160, 23, 0.25), 0 10px 40px -10px rgba(212, 160, 23, 0.3);
+        }
+
+        .dark .role-btn {
+            @apply border-white/10 bg-white/5;
+        }
+
+        .dark .role-btn:hover {
+            @apply border-agri-gold/40 bg-white/10;
+        }
+
+        .dark .role-btn.active {
+            @apply border-agri-gold bg-agri-gold/15;
+            box-shadow: 0 0 30px rgba(212, 160, 23, 0.3), 0 10px 40px -10px rgba(212, 160, 23, 0.4), inset 0 1px 0 rgba(212, 160, 23, 0.2);
+        }
+
+        .role-btn.active::after {
+            content: '✓';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            background: #D4A017;
+            color: #2B1B0E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 900;
+            box-shadow: 0 4px 12px rgba(212, 160, 23, 0.4);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .role-btn.active span:first-child {
+            transform: scale(1.15);
+            transition: transform 0.3s ease;
+        }
+
+        .role-btn.active span:last-child {
+            color: #D4A017 !important;
+        }
+
+        .nav-link-active {
+            @apply bg-white/10 text-white border border-white/10;
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--agri-gold);
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: -1;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body class="bg-agri-light text-slate-800 font-sans dark:bg-[#2B1B0E] dark:text-agri-cream transition-colors duration-500">
+    <!-- Background Blobs -->
+    <div class="blob top-[-100px] left-[-100px]"></div>
+    <div class="blob bottom-[-100px] right-[-100px]"></div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="fixed top-0 left-0 h-screen w-72 bg-agri-dark z-[100] border-r border-white/5 flex flex-col p-8 overflow-y-auto">
+        <!-- Brand -->
+        <div class="flex items-center gap-4 mb-16">
+            <img src="./assets/f3_logo.png" alt="F3 Logo" class="w-12 h-12 rounded-[1.25rem] shadow-2xl ring-4 ring-agri-gold/20 animate-float object-contain bg-white">
+            <span class="text-2xl font-black text-white tracking-tighter">F3:<span class="text-agri-gold">Fresh</span></span>
+        </div>
+
+        <!-- Main Nav Links -->
+        <div class="flex-1 space-y-3">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6 ml-4">Command Center</p>
+            
+            <a href="index.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white font-bold bg-white/10 border border-white/10 transition-all group shadow-xl">
+                <svg class="w-5 h-5 text-agri-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                Home
+            </a>
+            <a href="soil-health.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all group font-bold">
+                <svg class="w-5 h-5 opacity-50 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                Soil Health
+            </a>
+            <a href="crop-disease.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all group font-bold">
+                <svg class="w-5 h-5 opacity-50 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                Crop Disease
+            </a>
+            <a href="crop-calendar.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all group font-bold">
+                <svg class="w-5 h-5 opacity-50 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
+                Crop Calendar
+            </a>
+
+            <!-- Dynamic Section based on role -->
+            <div data-role-req="customer" class="hidden pt-6 space-y-3">
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 ml-4">Shopping</p>
+                <a href="market.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all group font-bold">
+                    Marketplace
+                </a>
+                <a href="market.html?view=orders" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all group font-bold">
+                    My Orders
+                </a>
+            </div>
+
+            <div data-role-req="farmer" class="hidden pt-6 space-y-3">
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 ml-4">Farmer Console</p>
+                <a href="inventory.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all group font-bold">
+                    Inventory
+                </a>
+                <a href="farmer-orders.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all group font-bold">
+                    Requested Orders
+                </a>
+                <a href="add-product.html" class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-agri-gold/10 text-agri-gold hover:bg-agri-gold hover:text-agri-dark transition-all group font-bold border border-agri-gold/20">
+                    Add Product
+                </a>
+            </div>
+        </div>
+
+        <!-- Sidebar Bottom -->
+        <div class="mt-auto pt-8 border-t border-white/5">
+            <!-- Theme Toggle -->
+            <div class="px-4 mb-6">
+                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                    <span id="theme-toggle-text-display" class="text-[10px] font-black uppercase tracking-widest">Dark Mode</span>
+                    <div id="theme-toggle-icon">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Profile / Auth -->
+            <div id="auth-section">
+                <button id="auth-btn" onclick="document.getElementById('auth-modal').classList.remove('hidden')"
+                    class="w-full bg-agri-gold text-agri-dark px-6 py-5 rounded-[1.5rem] text-sm font-black hover:bg-white transition-all shadow-2xl shadow-agri-gold/20 transform hover:-translate-y-1 active:scale-95">
+                    Sign In
+                </button>
+                <div id="user-profile" class="hidden flex-col gap-4">
+                    <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
+                        <div class="flex items-center justify-between mb-2">
+                             <div class="w-2 h-2 rounded-full bg-agri-gold animate-pulse"></div>
+                             <span id="user-role" class="text-[8px] font-black uppercase tracking-widest text-white/40"></span>
+                        </div>
+                        <span id="user-email" class="text-xs font-bold text-white truncate block"></span>
+                    </div>
+                    <button id="logout-btn" class="w-full text-[10px] text-red-400 font-black uppercase tracking-widest hover:text-red-300 py-2 transition-colors">Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="md:pl-72 min-h-screen">
+        <!-- Hero Section -->
+        <section id="home" class="hero-bg h-screen flex items-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-agri-dark via-transparent to-transparent opacity-80"></div>
+            
+            <div class="max-w-5xl mx-auto px-12 relative z-10 w-full animate-slide-up">
+                <div class="inline-flex items-center gap-3 px-6 py-2.5 glass rounded-full mb-10 border-white/10 shadow-2xl">
+                    <span class="w-2 h-2 bg-agri-gold rounded-full animate-ping"></span>
+                    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-agri-gold">Empowering Rural Bharat</p>
+                </div>
+                <h1 class="text-6xl md:text-9xl font-serif font-black mb-8 leading-[0.9] tracking-tighter text-white">
+                    Cultivating <br><span class="gradient-text">The Future.</span>
+                </h1>
+                <p class="text-xl md:text-2xl font-medium text-slate-300 mb-12 max-w-2xl leading-relaxed opacity-90">
+                    The intelligent ecosystem connecting farmers with cutting-edge AI, direct markets, and precision agronomy.
+                </p>
+
+                <div class="flex flex-wrap gap-6">
+                    <a href="#pillars" class="px-10 py-5 bg-agri-gold text-agri-dark rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white transition-all shadow-2xl shadow-agri-gold/20 transform hover:-translate-y-1">
+                        Explore Pillars
+                    </a>
+                    <button onclick="document.getElementById('auth-modal').classList.remove('hidden')" class="px-10 py-5 glass text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/10 transition-all border-white/20">
+                        Join Network
+                    </button>
+                </div>
+            </div>
+
+            <!-- Floating Decoration -->
+            <div class="absolute bottom-12 right-12 hidden xl:block animate-float">
+                <div class="glass p-8 rounded-[3rem] border-white/10 max-w-xs shadow-2xl">
+                    <p class="text-[10px] font-black text-agri-gold uppercase tracking-widest mb-4">Live Insights</p>
+                    <p class="text-white text-sm font-bold leading-relaxed mb-6">"AI Precision suggests optimal sowing for Wheat in UP begins in 14 days."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-agri-green-light flex items-center justify-center text-[10px] font-black text-white">SA</div>
+                        <span class="text-[10px] font-black text-white/50 uppercase tracking-widest">Smart Advisor</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pillars Section -->
+        <section id="pillars" class="py-32 px-12 bg-white dark:bg-slate-900 relative">
+            <div class="max-w-7xl mx-auto">
+                <header class="flex flex-col md:flex-row justify-between items-end gap-8 mb-24">
+                    <div class="max-w-2xl">
+                        <p class="text-xs font-black text-agri-green tracking-[0.3em] uppercase mb-4 dark:text-agri-gold">The F3 Stack</p>
+                        <h2 class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter dark:text-white leading-none">The Pillars of <br><span class="gradient-text">Empowerment</span></h2>
+                    </div>
+                    <div class="h-px bg-slate-100 dark:bg-white/5 flex-1 mx-12 hidden md:block"></div>
+                </header>
+
+                <div class="grid md:grid-cols-3 gap-12">
+                    <!-- Pillar 1 -->
+                    <div class="premium-card group">
+                        <div class="relative h-72 rounded-[2rem] overflow-hidden mb-10 shadow-2xl">
+                            <img src="./assets/smart_farming_iot_1771235589906.png" alt="AI" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-agri-dark/60 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 flex items-center gap-3">
+                                <div class="w-10 h-10 bg-agri-gold rounded-xl flex items-center justify-center text-agri-dark shadow-xl">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                </div>
+                                <span class="text-white font-black text-xs uppercase tracking-widest">Precision Intelligence</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">AI Agronomist</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Harnessing Llama 3 & Gemini to provide real-time disease diagnosis, soil health insights, and personalized growth timelines.</p>
+                        <a href="soil-health.html" class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-agri-green-light hover:text-agri-gold transition-colors">
+                            Analyze Soil →
+                        </a>
+                    </div>
+
+                    <!-- Pillar 2 -->
+                    <div class="premium-card group" style="transition-delay: 100ms;">
+                        <div class="relative h-72 rounded-[2rem] overflow-hidden mb-10 shadow-2xl">
+                            <img src="./assets/food_processing_tech_1771235606534.png" alt="Market" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-agri-dark/60 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 flex items-center gap-3">
+                                <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white shadow-xl">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                </div>
+                                <span class="text-white font-black text-xs uppercase tracking-widest">Fair Trade</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">Direct Marketplace</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Eliminating middlemen through a transparent B2B platform. Best prices for farmers, fresher produce for buyers.</p>
+                        <a href="market.html" class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-agri-green-light hover:text-agri-gold transition-colors">
+                            Visit Market →
+                        </a>
+                    </div>
+
+                    <!-- Pillar 3 -->
+                    <div class="premium-card group" style="transition-delay: 200ms;">
+                        <div class="relative h-72 rounded-[2rem] overflow-hidden mb-10 shadow-2xl">
+                            <img src="./assets/rural_skill_development_1771235655258.png" alt="Growth" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-agri-dark/60 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 flex items-center gap-3">
+                                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-xl">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                                <span class="text-white font-black text-xs uppercase tracking-widest">Wealth Creation</span>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-black mb-4 text-slate-900 dark:text-white tracking-tight">Financial Growth</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Providing yield forecasting and digital literacy, ensuring farming remains a profitable, data-backed profession.</p>
+                        <a href="analytics.html" class="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-agri-green-light hover:text-agri-gold transition-colors">
+                            View Insights →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mandi Prices -->
+        <section id="market" class="py-32 px-12 bg-slate-50 dark:bg-slate-950 transition-colors">
+            <div class="max-w-6xl mx-auto">
+                <div class="premium-card !p-0 overflow-hidden relative border-none">
+                    <div class="bg-agri-dark text-white p-12 flex flex-col md:flex-row justify-between items-center gap-8">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="w-3 h-3 rounded-full bg-agri-gold animate-pulse"></span>
+                                <h2 class="text-3xl font-black tracking-tight">Mandi Intelligence</h2>
+                            </div>
+                            <p class="text-slate-400 font-medium">Real-time arrival prices from national APMC hubs.</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Aggregated Data</span>
+                            <div class="px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest">Live Updates</div>
+                        </div>
+                    </div>
+
+                    <div class="p-12">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 dark:border-white/5">
+                                        <th class="pb-6">Commodity</th>
+                                        <th class="pb-6">Unit</th>
+                                        <th class="pb-6">Mandi Rate</th>
+                                        <th class="pb-6">Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="font-bold divide-y divide-slate-50 dark:divide-white/5">
+                                    <tr class="group hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+                                        <td class="py-8 text-xl font-black text-slate-800 dark:text-white">Wheat (Lokwan)</td>
+                                        <td class="py-8 text-slate-400">Quintal</td>
+                                        <td class="py-8 text-2xl font-black text-agri-dark dark:text-agri-gold">₹2,850</td>
+                                        <td class="py-8">
+                                            <span class="px-4 py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-xl text-[10px] font-black uppercase">↑ +1.2%</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+                                        <td class="py-8 text-xl font-black text-slate-800 dark:text-white">Basmati Rice</td>
+                                        <td class="py-8 text-slate-400">Quintal</td>
+                                        <td class="py-8 text-2xl font-black text-agri-dark dark:text-agri-gold">₹4,200</td>
+                                        <td class="py-8">
+                                            <span class="px-4 py-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 rounded-xl text-[10px] font-black uppercase">↑ +0.5%</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="group hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+                                        <td class="py-8 text-xl font-black text-slate-800 dark:text-white">Maize (Yellow)</td>
+                                        <td class="py-8 text-slate-400">Quintal</td>
+                                        <td class="py-8 text-2xl font-black text-agri-dark dark:text-agri-gold">₹2,100</td>
+                                        <td class="py-8">
+                                            <span class="px-4 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-xl text-[10px] font-black uppercase">↓ -0.8%</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="contact" class="bg-agri-dark text-white py-32 px-12 relative overflow-hidden">
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <div class="flex flex-col items-center gap-8 mb-16">
+                    <img src="./assets/f3_logo.png" alt="F3 Logo" class="w-20 h-20 rounded-[2rem] shadow-2xl object-contain bg-white">
+                    <h2 class="text-4xl md:text-6xl font-black tracking-tighter leading-tight">Join the Revolution <br>of <span class="text-agri-gold">Rural Bharat</span></h2>
+                </div>
+                <p class="text-slate-400 text-xl font-medium leading-relaxed mb-16 max-w-2xl mx-auto opacity-70">
+                    Join 10,000+ farmers using F3: Fresh From Farm to secure their legacy with data, transparency, and sustainable growth.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-12">
+                    <div class="flex items-center gap-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">
+                        <svg class="w-6 h-6 text-agri-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                        Agricultural Hub, Noida
+                    </div>
+                    <div class="flex items-center gap-4 text-slate-500 font-bold uppercase tracking-widest text-[10px]">
+                        <svg class="w-6 h-6 text-agri-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"></path></svg>
+                        contact@f3freshfromfarm.in
+                    </div>
+                </div>
+                <div class="mt-24 pt-12 border-t border-white/5 opacity-30">
+                    <p class="text-[10px] font-black uppercase tracking-[0.5em]">&copy; 2026 F3: Fresh From Farm</p>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-[200] hidden">
+        <div class="fixed inset-0 bg-agri-dark/80 backdrop-blur-xl transition-opacity" onclick="document.getElementById('auth-modal').classList.add('hidden')"></div>
+        <div class="fixed inset-0 flex items-center justify-center p-6 pointer-events-none">
+            <div class="bg-white dark:bg-slate-900 rounded-[3.5rem] shadow-2xl w-full max-w-md p-12 relative pointer-events-auto transform transition-all border border-slate-100 dark:border-white/5 animate-slide-up">
+                <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="absolute top-8 right-8 text-slate-300 hover:text-slate-500 transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                
+                <div class="text-center mb-12">
+                    <img src="./assets/f3_logo.png" alt="F3 Logo" class="w-16 h-16 rounded-2xl mx-auto mb-6 object-contain bg-white">
+                    <h3 id="modal-title" class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Welcome</h3>
+                    <p id="modal-desc" class="text-slate-400 mt-2 font-medium">Join the intelligent farming network</p>
+                </div>
+
+                <div id="auth-error" class="hidden mb-6 p-5 bg-red-50 text-red-600 text-xs rounded-2xl font-black text-center border border-red-100"></div>
+
+                <form id="auth-form" class="space-y-6">
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Choose Your Identity</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button type="button" onclick="selectRole('customer')" id="btn-customer" class="role-btn">
+                                <span class="text-2xl">🛒</span>
+                                <span class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">Customer</span>
+                            </button>
+                            <button type="button" onclick="selectRole('farmer')" id="btn-farmer" class="role-btn">
+                                <span class="text-2xl">🌾</span>
+                                <span class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">Farmer</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <input type="email" id="auth-email" placeholder="Email Address" required class="w-full px-6 py-5 rounded-2xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50 outline-none focus:border-agri-green dark:focus:border-agri-gold transition-all text-sm font-bold">
+                        <input type="password" id="auth-password" placeholder="Password" required class="w-full px-6 py-5 rounded-2xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50 outline-none focus:border-agri-green dark:focus:border-agri-gold transition-all text-sm font-bold">
+                    </div>
+
+                    <button type="submit" id="auth-submit-btn" class="w-full bg-agri-dark dark:bg-agri-gold dark:text-agri-dark text-white font-black py-5 rounded-[1.5rem] mt-4 transition-all shadow-2xl hover:scale-[1.02] active:scale-95 uppercase tracking-widest text-xs">
+                        Enter Workspace
+                    </button>
+                </form>
+
+                <div class="mt-10 text-center">
+                    <span id="auth-toggle-text" class="text-slate-400 font-medium">New member?</span>
+                    <button id="auth-toggle-btn" class="text-agri-green-light dark:text-agri-gold font-black ml-1 uppercase tracking-widest text-[10px] hover:underline">Register Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script src="./js/common.js"></script>
+    <script type="module" src="./js/index.js"></script>
+</body>
+</html>

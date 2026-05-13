@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Your Product | F3: Fresh From Farm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'agri-dark': '#2B1B0E',
+                        'agri-gold': '#D4A017',
+                        'agri-secondary': '#FFB800',
+                        'agri-cream': '#FFF9E5',
+                        'agri-light': '#fdfcfb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Noto Serif', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="./css/theme.css">
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .input-field { background: #f8fafc; border: 2px solid #f1f5f9; transition: all 0.3s ease; }
+        .dark .input-field { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+        .input-field:focus { border-color: #D4A017; background: white; box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.1); }
+        .dark .input-field:focus { background: #0f172a; }
+    </style>
+</head>
+<body class="bg-agri-light text-slate-800 font-sans dark:bg-[#2B1B0E] dark:text-agri-cream transition-colors duration-500">
+    
+    <!-- Sidebar Navigation (Consistent) -->
+    <nav class="fixed top-0 left-0 h-screen w-72 bg-agri-dark z-[100] border-r border-white/5 flex flex-col p-8 overflow-y-auto">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="w-10 h-10 bg-agri-gold rounded-xl flex items-center justify-center text-agri-dark font-black text-xl shadow-lg ring-4 ring-agri-gold/20">K</div>
+            <span class="text-2xl font-black text-white tracking-tight">F3:<span class="text-agri-gold">Fresh</span></span>
+        </div>
+
+        <div class="flex-1 space-y-2">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 ml-4">Farmer Console</p>
+            <a href="index.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Home</a>
+            <a href="soil-health.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Soil Health</a>
+            <a href="crop-disease.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Crop Disease</a>
+            <a href="crop-calendar.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Crop Calendar</a>
+            <a href="inventory.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Inventory</a>
+            <a href="farmer-orders.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Requested Orders</a>
+            <a href="add-product.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-agri-gold text-agri-dark transition-all group font-bold shadow-xl shadow-agri-gold/20">Add Your Product</a>
+        </div>
+
+        <div class="mt-auto pt-8 border-t border-white/5">
+            <!-- Theme Toggle -->
+            <div class="px-4 mb-6">
+                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                    <span id="theme-toggle-text-display" class="text-xs font-black uppercase tracking-widest">Dark Mode</span>
+                    <div id="theme-toggle-icon">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+            <a href="index.html" class="w-full inline-block text-center border border-white/10 text-white/50 px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-white hover:text-agri-dark transition-all">← Exit Tool</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="md:pl-72 flex flex-col min-h-screen">
+        <div class="p-12 max-w-4xl mx-auto w-full">
+            <header class="mb-12">
+                <div class="inline-flex items-center gap-3 px-4 py-1.5 bg-agri-gold/10 rounded-full border border-agri-gold/20 mb-6">
+                    <span class="w-1.5 h-1.5 bg-agri-gold rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-agri-gold">Farmer Direct Selling</span>
+                </div>
+                <h1 class="text-5xl font-serif font-black text-agri-dark dark:text-white tracking-tighter mb-4">List Your Produce</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl">Connect directly with customers. Set your prices and showcase your quality harvests to the F3: Fresh From Farm community.</p>
+            </header>
+
+            <form id="add-product-form" class="space-y-8 bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-xl shadow-slate-200/50 dark:shadow-none">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2 text-agri-gold">Product Name</label>
+                        <input type="text" placeholder="e.g. Organic Basmati Rice" class="w-full px-6 py-4 rounded-2xl input-field outline-none font-bold text-agri-dark">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2 text-agri-green">Category</label>
+                        <select class="w-full px-6 py-4 rounded-2xl input-field outline-none font-bold text-agri-dark dark:text-white appearance-none bg-white dark:bg-slate-800">
+                            <option>Grains</option>
+                            <option>Vegetables</option>
+                            <option>Fruits</option>
+                            <option>Pulses</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2 text-agri-green">Quantity (kg/units)</label>
+                        <input type="number" placeholder="0.00" class="w-full px-6 py-4 rounded-2xl input-field outline-none font-bold text-agri-dark">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2 text-agri-green">Price per Unit (₹)</label>
+                        <input type="number" placeholder="0.00" class="w-full px-6 py-4 rounded-2xl input-field outline-none font-bold text-agri-dark">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2 text-agri-green">Harvest Date</label>
+                        <input type="date" class="w-full px-6 py-4 rounded-2xl input-field outline-none font-bold text-agri-dark">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2 text-agri-green">Description & Quality Details</label>
+                    <textarea rows="4" placeholder="Tell customers about your farming methods, variety, and health benefits..." class="w-full px-6 py-4 rounded-2xl input-field outline-none font-bold text-agri-dark resize-none"></textarea>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-black uppercase tracking-widest text-slate-400 ml-2 text-agri-green">Product Media</label>
+                        <div class="flex gap-4">
+                            <button type="button" onclick="setImageMode('upload')" id="mode-upload" class="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-agri-gold text-agri-dark rounded-full transition-all">Upload File</button>
+                            <button type="button" onclick="setImageMode('url')" id="mode-url" class="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full transition-all">Image URL</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Upload Mode -->
+                    <div id="container-upload" class="relative group">
+                        <div class="w-full h-56 rounded-[2rem] border-4 border-dashed border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-800/50 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-white dark:hover:bg-slate-800 hover:border-agri-gold/30 transition-all overflow-hidden relative">
+                            <div id="preview-display" class="absolute inset-0 z-0 hidden bg-cover bg-center"></div>
+                            <div id="upload-prompt" class="relative z-10 flex flex-col items-center gap-2">
+                                <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm text-slate-400 group-hover:text-agri-gold transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <span class="text-sm font-bold text-slate-400 group-hover:text-agri-dark transition-all">Select high-quality harvest photo</span>
+                            </div>
+                            <input type="file" id="product-file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-20">
+                        </div>
+                    </div>
+
+                    <!-- URL Mode -->
+                    <div id="container-url" class="hidden animate-slide-up">
+                        <div class="relative">
+                            <input type="text" id="product-url" placeholder="https://example.com/image.jpg" class="w-full px-6 py-5 rounded-2xl input-field outline-none font-bold text-agri-dark pr-32">
+                            <button type="button" onclick="previewFromUrl()" class="absolute right-2 top-2 bottom-2 bg-agri-dark text-white text-[10px] font-black uppercase tracking-widest px-6 rounded-xl hover:bg-agri-green transition-all">Test Link</button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-3 font-bold uppercase tracking-widest ml-4">Tip: Use high-quality JPG or PNG links</p>
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit" class="w-full py-6 bg-agri-dark text-white rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:bg-agri-gold transition-all shadow-2xl shadow-agri-dark/40 transform hover:-translate-y-1">
+                        Publish Listing
+                    </button>
+                    <p class="text-center text-[10px] text-slate-400 mt-6 font-bold uppercase tracking-widest opacity-60">Verified listings appear instantly on the Marketplace</p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script src="./js/common.js"></script>
+    <script>
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        function setImageMode(mode) {
+            const upBtn = document.getElementById('mode-upload');
+            const urlBtn = document.getElementById('mode-url');
+            const upCont = document.getElementById('container-upload');
+            const urlCont = document.getElementById('container-url');
+
+            if(mode === 'upload') {
+                upBtn.className = 'text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-agri-gold text-agri-dark rounded-full transition-all';
+                urlBtn.className = 'text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full transition-all';
+                upCont.classList.remove('hidden');
+                urlCont.classList.add('hidden');
+            } else {
+                urlBtn.className = 'text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-agri-gold text-agri-dark rounded-full transition-all';
+                upBtn.className = 'text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full transition-all';
+                urlCont.classList.remove('hidden');
+                upCont.classList.add('hidden');
+            }
+        }
+
+        const fileInput = document.getElementById('product-file');
+        const preview = document.getElementById('preview-display');
+        const promptText = document.getElementById('upload-prompt');
+
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.style.backgroundImage = `url(${e.target.result})`;
+                    preview.classList.remove('hidden');
+                    promptText.classList.add('opacity-0');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function previewFromUrl() {
+            const url = document.getElementById('product-url').value;
+            if(url) {
+                preview.style.backgroundImage = `url(${url})`;
+                preview.classList.remove('hidden');
+                promptText.classList.add('opacity-0');
+                document.getElementById('container-upload').classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('add-product-form').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="animate-pulse">Syncing with Firebase...</span>';
+
+            const name = e.target.querySelector('input[placeholder*="Organic Basmati"]').value;
+            const category = e.target.querySelector('select').value;
+            const quantity = e.target.querySelector('input[placeholder="0.00"]').value;
+            const price = e.target.querySelectorAll('input[placeholder="0.00"]')[1].value;
+            const description = e.target.querySelector('textarea').value;
+            
+            let imageUrl = document.getElementById('product-url').value;
+            if(!imageUrl) {
+                const bg = document.getElementById('preview-display').style.backgroundImage;
+                imageUrl = bg ? bg.slice(5, -2) : '';
+            }
+
+            const farmerEmail = localStorage.getItem('userEmail') || 'unknown@farmer.com';
+
+            try {
+                // Check auth
+                const user = auth.currentUser;
+                // Note: We don't block if user is null for now to allow dev testing if they haven't logged in yet,
+                // but the rules might block it (which is good).
+
+                await db.collection('products').add({
+                    name, 
+                    category, 
+                    quantity: Number(quantity), 
+                    price: Number(price), 
+                    image_url: imageUrl, 
+                    farmer_email: farmerEmail, 
+                    description,
+                    uid: user ? user.uid : null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert('🔥 Success! Your product is now live on the Firebase Network.');
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error('Firebase Direct Error:', err);
+                alert(`Permission Denied! Have you updated your Firestore rules to 'allow read, write: if true;'? \n\nDetails: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Publish Listing';
+            }
+        };
+    </script>
+</body>
+</html>

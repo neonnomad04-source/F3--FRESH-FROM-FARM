@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Inventory | F3: Fresh From Farm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'agri-dark': '#2B1B0E',
+                        'agri-gold': '#D4A017',
+                        'agri-secondary': '#FFB800',
+                        'agri-cream': '#FFF9E5',
+                        'agri-light': '#fdfcfb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Noto Serif', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="./css/theme.css">
+</head>
+<body class="bg-agri-light text-slate-800 font-sans dark:bg-[#2B1B0E] dark:text-agri-cream transition-colors duration-500">
+    
+    <!-- Sidebar Navigation (Consistent) -->
+    <nav class="fixed top-0 left-0 h-screen w-72 bg-agri-dark z-[100] border-r border-white/5 flex flex-col p-8 overflow-y-auto">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="w-10 h-10 bg-agri-gold rounded-xl flex items-center justify-center text-agri-dark font-black text-xl shadow-lg ring-4 ring-agri-gold/20">K</div>
+            <span class="text-2xl font-black text-white tracking-tight">F3:<span class="text-agri-gold">Fresh</span></span>
+        </div>
+
+        <div class="flex-1 space-y-2">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 ml-4">Farmer Console</p>
+            <a href="index.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Home</a>
+            <a href="soil-health.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Soil Health</a>
+            <a href="crop-disease.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Crop Disease</a>
+            <a href="crop-calendar.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Crop Calendar</a>
+            <a href="inventory.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Inventory</a>
+            <a href="farmer-orders.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Requested Orders</a>
+            <a href="add-product.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-agri-gold text-agri-dark transition-all group font-bold shadow-xl shadow-agri-gold/20">Add Your Product</a>
+        </div>
+
+        <div class="mt-auto pt-8 border-t border-white/5">
+            <!-- Theme Toggle -->
+            <div class="px-4 mb-6">
+                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                    <span id="theme-toggle-text-display" class="text-xs font-black uppercase tracking-widest">Dark Mode</span>
+                    <div id="theme-toggle-icon">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+            <a href="index.html" class="w-full inline-block text-center border border-white/10 text-white/50 px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-white hover:text-agri-dark transition-all">← Exit Tool</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="md:pl-72 flex flex-col min-h-screen">
+        <div class="p-12 max-w-6xl mx-auto w-full">
+            <header class="flex justify-between items-end mb-12">
+                <div>
+                    <h1 class="text-5xl font-serif font-black text-agri-dark dark:text-white tracking-tighter mb-4">Stock Management</h1>
+                    <p class="text-slate-500 dark:text-slate-400 text-lg font-medium">Monitoring your current harvests and storage levels.</p>
+                </div>
+                <button onclick="window.location.href='add-product.html'" class="bg-agri-dark text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-agri-gold transition-all shadow-xl">
+                    + New Stock
+                </button>
+            </header>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white dark:bg-[#362414] p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/5 shadow-sm">
+                    <p class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Total In Stock</p>
+                    <p class="text-4xl font-black text-agri-dark dark:text-white" id="stat-instock">0 <span class="text-lg font-medium text-slate-400">kg</span></p>
+                </div>
+                <div class="bg-white dark:bg-[#362414] p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/5 shadow-sm">
+                    <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Pending Sale</p>
+                    <p class="text-4xl font-black text-agri-gold" id="stat-pending">0 <span class="text-lg font-medium text-slate-400">kg</span></p>
+                </div>
+                <div class="bg-white dark:bg-[#362414] p-8 rounded-[2.5rem] border border-slate-100 dark:border-white/5 shadow-sm">
+                    <p class="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Est. Inventory Value</p>
+                    <p class="text-4xl font-black text-agri-gold" id="stat-value">₹0</p>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-white/5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
+                        <tr>
+                            <th class="px-10 py-6">Product</th>
+                            <th class="px-10 py-6">Category</th>
+                            <th class="px-10 py-6">In Stock</th>
+                            <th class="px-10 py-6">Status</th>
+                            <th class="px-10 py-6">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody" class="divide-y divide-slate-50 dark:divide-white/5 font-bold text-agri-dark dark:text-white">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script src="./js/common.js"></script>
+    <script>
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                alert('Please login as a farmer first.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Real-time Inventory Sync
+            db.collection('products')
+              .where('farmer_email', '==', userEmail)
+              .onSnapshot((querySnapshot) => {
+                let totalStock = 0;
+                let estValue = 0;
+                const tbody = document.getElementById('inventory-tbody');
+                tbody.innerHTML = '';
+                
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-10 py-12 text-center text-slate-400 font-bold uppercase tracking-widest text-[10px]">Your inventory is empty. Start listing produce!</td></tr>';
+                    return;
+                }
+
+                querySnapshot.forEach(doc => {
+                    const product = { id: doc.id, ...doc.data() };
+                    const qty = parseFloat(product.quantity) || 0;
+                    const price = parseFloat(product.price) || 0;
+                    totalStock += qty;
+                    estValue += (qty * price);
+
+                    let statusObj = { text: 'Live', class: 'bg-green-100 text-green-700' };
+                    if (qty <= 0) {
+                        statusObj = { text: 'Out of Stock', class: 'bg-red-100 text-red-700' };
+                    } else if (qty < 50) {
+                        statusObj = { text: 'Low Stock', class: 'bg-orange-100 text-orange-700' };
+                    }
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 dark:hover:bg-white/5 transition-all';
+                    tr.innerHTML = `
+                        <td class="px-10 py-6 font-black">${product.name}</td>
+                        <td class="px-10 py-6 text-slate-400 dark:text-slate-500">${product.category || 'Other'}</td>
+                        <td class="px-10 py-6">${qty.toLocaleString()} kg</td>
+                        <td class="px-10 py-6">
+                            <span class="${statusObj.class} px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">${statusObj.text}</span>
+                        </td>
+                        <td class="px-10 py-6">
+                            <button onclick="deleteProduct('${product.id}')" class="text-red-400 hover:text-red-600 font-black text-[10px] uppercase tracking-widest transition-all">Remove</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('stat-instock').innerHTML = `${totalStock.toLocaleString()} <span class="text-lg font-medium text-slate-400">kg</span>`;
+                document.getElementById('stat-value').innerText = `₹${estValue.toLocaleString()}`;
+            }, (err) => {
+                console.error('Inventory Sync Error:', err);
+            });
+        });
+
+        async function deleteProduct(id) {
+            if (confirm('Are you sure you want to remove this product from the marketplace?')) {
+                try {
+                    await db.collection('products').doc(id).delete();
+                } catch (e) {
+                    alert('Error removing product: ' + e.message);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

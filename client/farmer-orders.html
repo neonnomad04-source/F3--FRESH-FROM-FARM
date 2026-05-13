@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requested Orders | F3: Fresh From Farm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'agri-dark': '#2B1B0E',
+                        'agri-gold': '#D4A017',
+                        'agri-secondary': '#FFB800',
+                        'agri-cream': '#FFF9E5',
+                        'agri-light': '#fdfcfb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Noto Serif', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="./css/theme.css">
+</head>
+<body class="bg-agri-light text-slate-800 font-sans dark:bg-[#2B1B0E] dark:text-agri-cream transition-colors duration-500">
+    
+    <!-- Sidebar Navigation -->
+    <nav class="fixed top-0 left-0 h-screen w-72 bg-agri-dark z-[100] border-r border-white/5 flex flex-col p-8 overflow-y-auto">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="w-10 h-10 bg-agri-gold rounded-xl flex items-center justify-center text-agri-dark font-black text-xl shadow-lg ring-4 ring-agri-gold/20">F</div>
+            <span class="text-2xl font-black text-white tracking-tight">F3:<span class="text-agri-gold">Fresh</span></span>
+        </div>
+
+        <div class="flex-1 space-y-2">
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 ml-4">Farmer Console</p>
+            <a href="index.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Home</a>
+            <a href="soil-health.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Soil Health</a>
+            <a href="crop-disease.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Crop Disease</a>
+            <a href="crop-calendar.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Crop Calendar</a>
+            <a href="inventory.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Inventory</a>
+            <a href="farmer-orders.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-agri-gold text-agri-dark transition-all group font-bold shadow-xl shadow-agri-gold/20">Requested Orders</a>
+            <a href="add-product.html" class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-white/70 hover:text-white hover:bg-white/5 transition-all group font-bold">Add Product</a>
+        </div>
+
+        <div class="mt-auto pt-8 border-t border-white/5">
+            <!-- Theme Toggle -->
+            <div class="px-4 mb-6">
+                <button onclick="toggleTheme()" class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition-all group">
+                    <span id="theme-toggle-text-display" class="text-xs font-black uppercase tracking-widest">Dark Mode</span>
+                    <div id="theme-toggle-icon">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+            <a href="index.html" class="w-full inline-block text-center border border-white/10 text-white/50 px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-white hover:text-agri-dark transition-all">← Exit Tool</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="md:pl-72 flex flex-col min-h-screen">
+        <div class="p-12 max-w-6xl mx-auto w-full">
+            <header class="mb-12">
+                <div class="inline-flex items-center gap-3 px-4 py-1.5 bg-agri-gold/10 rounded-full border border-agri-gold/20 mb-6">
+                    <span class="w-1.5 h-1.5 bg-agri-gold rounded-full animate-pulse"></span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-agri-gold">Incoming Harvest Requests</span>
+                </div>
+                <h1 class="text-5xl font-serif font-black text-agri-dark dark:text-white tracking-tighter mb-4">Customer Orders</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-lg font-medium leading-relaxed max-w-2xl">Manage your active orders and coordinate deliveries with your customers.</p>
+            </header>
+
+            <!-- Orders Table -->
+            <div class="bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-white/5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
+                        <tr>
+                            <th class="px-10 py-6">Customer & Contact</th>
+                            <th class="px-10 py-6">Product Ordered</th>
+                            <th class="px-10 py-6">Delivery Address</th>
+                            <th class="px-10 py-6">Payment</th>
+                            <th class="px-10 py-6">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="farmer-orders-body" class="divide-y divide-slate-50 dark:divide-white/5 font-bold text-agri-dark dark:text-slate-200">
+                        <!-- Orders will be loaded here -->
+                        <tr>
+                            <td colspan="5" class="px-10 py-20 text-center text-slate-400">
+                                <div class="flex flex-col items-center gap-4">
+                                    <div class="w-12 h-12 border-4 border-agri-gold border-t-transparent rounded-full animate-spin"></div>
+                                    <p class="uppercase tracking-widest text-[10px] font-black">Scanning database for requests...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script src="./js/common.js"></script>
+    <script>
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const farmerEmail = localStorage.getItem('userEmail') || 'unknown@farmer.com';
+
+        function loadFarmerOrders() {
+            const body = document.getElementById('farmer-orders-body');
+            
+            // Real-time Order Sync
+            db.collection('orders')
+              .where('farmer_name', '==', farmerEmail)
+              .onSnapshot((querySnapshot) => {
+                if (querySnapshot.empty) {
+                    body.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="px-10 py-20 text-center text-slate-400 font-black uppercase tracking-[0.2em] text-xs">
+                                No incoming orders yet. Your products are live!
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                const orders = [];
+                querySnapshot.forEach(doc => {
+                    orders.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Manual sort by createdAt
+                orders.sort((a,b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+
+                body.innerHTML = orders.map(o => `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
+                        <td class="px-10 py-6">
+                            <p class="text-slate-900 dark:text-white">${o.user_email}</p>
+                            <p class="text-xs text-agri-green-light font-black mt-1">${o.phone || 'No phone provided'}</p>
+                        </td>
+                        <td class="px-10 py-6">
+                            <p>${o.product_name} <span class="text-xs text-slate-400 dark:text-slate-500 font-bold ml-2">x${o.quantity || 1}</span></p>
+                            <p class="text-lg font-black text-agri-green dark:text-agri-gold mt-1">₹${o.price}</p>
+                        </td>
+                        <td class="px-10 py-6">
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[200px]">${o.address || 'Standard Delivery'}</p>
+                        </td>
+                        <td class="px-10 py-6 lowercase">
+                            <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-[9px] font-black uppercase tracking-widest">${o.payment_method || 'UPI'}</span>
+                        </td>
+                        <td class="px-10 py-6">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 ${o.status === 'Delivered' ? 'bg-green-100 dark:bg-green-900/30 text-green-700' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700'} rounded-full text-[9px] font-black uppercase tracking-widest">${o.status || 'Processing'}</span>
+                                ${o.status !== 'Delivered' ? `<button onclick="markDelivered('${o.id}')" class="text-[9px] font-black uppercase tracking-widest text-agri-green-light hover:underline">Mark Delivered</button>` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }, (err) => {
+                console.error('Order Sync Error:', err);
+                body.innerHTML = `<tr><td colspan="5" class="px-10 py-20 text-center text-red-500 font-bold">Cloud Sync Failed.</td></tr>`;
+            });
+        }
+
+        async function markDelivered(orderId) {
+            try {
+                await db.collection('orders').doc(orderId).update({
+                    status: 'Delivered'
+                });
+                showToast('Success! Order status updated.');
+            } catch (err) {
+                console.error(err);
+                alert('Update failed: ' + err.message);
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-12 left-1/2 -translate-x-1/2 z-[300] bg-agri-dark text-white px-8 py-4 rounded-2xl font-bold shadow-2xl animate-fade-in';
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadFarmerOrders);
+    </script>
+</body>
+</html>

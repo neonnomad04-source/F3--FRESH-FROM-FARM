@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F3: Fresh From Farm | Welcome to the Future of Agriculture</title>
+    <meta name="description" content="F3 - The intelligent ecosystem connecting farmers with cutting-edge AI, direct markets, and precision agronomy.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'agri-dark': '#2B1B0E',
+                        'agri-gold': '#D4A017',
+                        'agri-secondary': '#FFB800',
+                        'agri-cream': '#FFF9E5',
+                        'agri-light': '#fdfcfb',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Noto Serif', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background: #1A1108; color: #FFF9E5; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+
+        /* Globe */
+        @keyframes earthRotate { 0% { background-position: 0 0; } 100% { background-position: 400px 0; } }
+        @keyframes twinkle { 0%,100% { opacity:0.1; } 50% { opacity:1; } }
+        @keyframes twinkleSlow { 0%,100% { opacity:0.1; } 50% { opacity:1; } }
+
+        .globe-container {
+            position: fixed; z-index: 5; pointer-events: none;
+            will-change: transform;
+            transition: transform 1.4s cubic-bezier(0.23,1,0.32,1), opacity 1.4s ease;
+        }
+        .globe {
+            width: 250px; height: 250px; border-radius: 50%; overflow: hidden;
+            background-image: url('https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/globe.jpeg');
+            background-size: cover; background-position: left;
+            animation: earthRotate 30s linear infinite;
+            box-shadow: 0 0 20px rgba(212,160,23,0.25), -5px 0 8px #D4A01744 inset, 15px 2px 25px #000 inset, -24px -2px 34px #D4A01733 inset, 250px 0 44px #00000066 inset, 150px 0 38px #000000aa inset;
+        }
+        .star { position: absolute; width: 4px; height: 4px; background: #D4A017; border-radius: 50%; }
+
+        /* Progress */
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 3px; z-index: 100; background: rgba(43,27,14,0.3); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #D4A017, #FFB800, #D4A017); transform-origin: left; transition: transform 0.15s ease-out; }
+
+        /* Nav dots */
+        .nav-dots { position: fixed; right: 2rem; top: 50%; transform: translateY(-50%); z-index: 50; display: flex; flex-direction: column; gap: 1.5rem; }
+        .nav-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid rgba(212,160,23,0.3); background: transparent; cursor: pointer; transition: all 0.3s; position: relative; }
+        .nav-dot.active { background: #D4A017; border-color: #D4A017; box-shadow: 0 0 12px rgba(212,160,23,0.4); }
+        .nav-dot:hover { border-color: #D4A017; transform: scale(1.3); }
+        .nav-label { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: #D4A017; background: rgba(43,27,14,0.95); border: 1px solid rgba(212,160,23,0.2); padding: 6px 14px; border-radius: 8px; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(10px); }
+        .nav-dot:hover .nav-label, .nav-dot.active .nav-label { opacity: 1; }
+
+        /* Sections */
+        .scroll-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem; position: relative; z-index: 10; }
+
+        /* Feature cards */
+        .feature-card {
+            padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(212,160,23,0.1);
+            background: rgba(43,27,14,0.6); backdrop-filter: blur(12px);
+            transition: all 0.3s; cursor: default;
+        }
+        .feature-card:hover { background: rgba(43,27,14,0.8); border-color: rgba(212,160,23,0.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+
+        /* Buttons */
+        .btn-gold { background: #D4A017; color: #2B1B0E; font-weight: 800; padding: 1rem 2.5rem; border-radius: 1rem; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.3s; border: none; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-gold:hover { background: #FFB800; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(212,160,23,0.3); }
+        .btn-outline { border: 2px solid rgba(212,160,23,0.3); color: #FFF9E5; font-weight: 800; padding: 1rem 2.5rem; border-radius: 1rem; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; transition: all 0.3s; background: rgba(43,27,14,0.4); backdrop-filter: blur(8px); cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-outline:hover { border-color: #D4A017; background: rgba(212,160,23,0.1); }
+
+        /* Gradient text */
+        .gold-gradient { background: linear-gradient(135deg, #D4A017, #FFB800, #FFF9E5); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Blob */
+        .bg-blob { position: absolute; width: 500px; height: 500px; background: #D4A017; filter: blur(120px); opacity: 0.08; border-radius: 50%; pointer-events: none; z-index: 0; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1A1108; }
+        ::-webkit-scrollbar-thumb { background: #D4A017; border-radius: 10px; }
+
+        @media (max-width: 768px) {
+            .globe { width: 180px; height: 180px; }
+            .nav-dots { display: none; }
+            .scroll-section { padding: 3rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots" id="navDots">
+        <button class="nav-dot active" data-section="0"><span class="nav-label">Welcome</span></button>
+        <button class="nav-dot" data-section="1"><span class="nav-label">Intelligence</span></button>
+        <button class="nav-dot" data-section="2"><span class="nav-label">Platform</span></button>
+        <button class="nav-dot" data-section="3"><span class="nav-label">Enter</span></button>
+    </div>
+
+    <!-- Globe -->
+    <div class="globe-container" id="globeContainer">
+        <div class="globe"></div>
+        <div class="star" style="left:-20px;top:50px;animation:twinkle 3s infinite"></div>
+        <div class="star" style="left:-40px;top:30px;animation:twinkleSlow 2s infinite"></div>
+        <div class="star" style="left:280px;top:90px;animation:twinkle 4s infinite"></div>
+        <div class="star" style="left:200px;top:290px;animation:twinkleSlow 3s infinite"></div>
+        <div class="star" style="left:50px;top:270px;animation:twinkle 1.5s infinite"></div>
+        <div class="star" style="left:260px;top:-30px;animation:twinkleSlow 4s infinite"></div>
+    </div>
+
+    <!-- Section 1: Hero -->
+    <section class="scroll-section" id="section-0">
+        <div class="bg-blob" style="top:-200px;left:-200px;"></div>
+        <div style="max-width:700px;">
+            <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 20px;background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2);border-radius:999px;margin-bottom:2rem;">
+                <span style="width:8px;height:8px;background:#D4A017;border-radius:50%;animation:twinkle 2s infinite;"></span>
+                <span style="font-size:10px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#D4A017;">Empowering Rural Bharat</span>
+            </div>
+            <h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:900;line-height:0.95;letter-spacing:-0.03em;margin-bottom:2rem;">
+                Cultivating<br><span class="gold-gradient">The Future.</span>
+            </h1>
+            <p style="font-size:1.25rem;color:rgba(255,249,229,0.6);line-height:1.7;margin-bottom:3rem;max-width:550px;">
+                The intelligent ecosystem connecting farmers with cutting-edge AI, direct markets, and precision agronomy. Scroll to explore.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;">
+                <a href="#section-2" class="btn-gold">Explore Platform</a>
+                <a href="index.html" class="btn-outline">Enter Dashboard</a>
+            </div>
+            <div style="display:flex;gap:2rem;margin-top:3rem;font-size:11px;color:rgba(255,249,229,0.35);font-weight:600;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="width:6px;height:6px;background:#D4A017;border-radius:50%;animation:twinkle 2s infinite;"></span>
+                    Interactive Experience
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="width:6px;height:6px;background:#D4A017;border-radius:50%;animation:twinkle 2s 0.5s infinite;"></span>
+                    Scroll to Explore
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: AI Intelligence -->
+    <section class="scroll-section" id="section-1" style="align-items:center;text-align:center;">
+        <div class="bg-blob" style="bottom:-100px;right:-200px;"></div>
+        <div style="max-width:700px;">
+            <p style="font-size:10px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#D4A017;margin-bottom:1rem;">AI-Powered Intelligence</p>
+            <h2 style="font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1;letter-spacing:-0.03em;margin-bottom:2rem;">
+                Connected<br><span class="gold-gradient">Worldwide</span>
+            </h2>
+            <p style="font-size:1.15rem;color:rgba(255,249,229,0.55);line-height:1.8;max-width:500px;margin:0 auto;">
+                Harnessing Llama 3 & Gemini to provide real-time disease diagnosis, soil health insights, and personalized growth timelines — from every corner of the globe.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 3: Features -->
+    <section class="scroll-section" id="section-2">
+        <div class="bg-blob" style="top:50%;left:-300px;"></div>
+        <div style="max-width:700px;">
+            <p style="font-size:10px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:#D4A017;margin-bottom:1rem;">The F3 Tech Stack</p>
+            <h2 style="font-size:clamp(2rem,5vw,4rem);font-weight:900;line-height:1;letter-spacing:-0.03em;margin-bottom:1rem;">
+                Expanding<br><span class="gold-gradient">Possibilities</span>
+            </h2>
+            <p style="font-size:1.1rem;color:rgba(255,249,229,0.5);line-height:1.7;margin-bottom:2.5rem;">
+                Every pillar of F3 is designed to push farming beyond familiar boundaries.
+            </p>
+            <div style="display:grid;gap:1rem;">
+                <div class="feature-card">
+                    <div style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div style="width:10px;height:10px;border-radius:50%;background:#D4A017;margin-top:6px;flex-shrink:0;"></div>
+                        <div>
+                            <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;">Precision Diagnostics</h3>
+                            <p style="color:rgba(255,249,229,0.5);font-size:0.95rem;line-height:1.6;">Upload a leaf photo — AI identifies diseases instantly with treatment plans powered by Gemini vision models.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div style="width:10px;height:10px;border-radius:50%;background:#FFB800;margin-top:6px;flex-shrink:0;"></div>
+                        <div>
+                            <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;">Direct Marketplace</h3>
+                            <p style="color:rgba(255,249,229,0.5);font-size:0.95rem;line-height:1.6;">Eliminating middlemen through a transparent B2B platform. Best prices for farmers, fresher produce for buyers.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div style="width:10px;height:10px;border-radius:50%;background:#FFF9E5;margin-top:6px;flex-shrink:0;"></div>
+                        <div>
+                            <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;">Smart Crop Calendar</h3>
+                            <p style="color:rgba(255,249,229,0.5);font-size:0.95rem;line-height:1.6;">Personalized sowing & harvesting timelines backed by weather data and regional agronomic research.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: CTA -->
+    <section class="scroll-section" id="section-3" style="align-items:center;text-align:center;">
+        <div class="bg-blob" style="top:30%;left:50%;transform:translateX(-50%);width:800px;height:800px;opacity:0.05;"></div>
+        <div style="max-width:700px;">
+            <div style="width:80px;height:80px;background:#D4A017;color:#2B1B0E;border-radius:1.5rem;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:2.5rem;margin:0 auto 2rem;box-shadow:0 20px 50px rgba(212,160,23,0.3);">K</div>
+            <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1.5rem;">
+                Join the Revolution<br>of <span class="gold-gradient">Rural Bharat</span>
+            </h2>
+            <p style="font-size:1.1rem;color:rgba(255,249,229,0.45);line-height:1.7;margin-bottom:3rem;max-width:500px;margin-left:auto;margin-right:auto;">
+                Join 10,000+ farmers using F3 to secure their legacy with data, transparency, and sustainable growth.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
+                <a href="index.html" class="btn-gold">Enter Dashboard</a>
+                <a href="market.html" class="btn-outline">Visit Marketplace</a>
+            </div>
+            <div style="margin-top:5rem;padding-top:2rem;border-top:1px solid rgba(212,160,23,0.1);opacity:0.3;">
+                <p style="font-size:9px;font-weight:800;letter-spacing:0.5em;text-transform:uppercase;">© 2026 F3: Fresh From Farm Ecosystem</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Globe positions for each section
+        const globePositions = [
+            { top: 50, left: 75, scale: 1.4 },   // Hero: right side
+            { top: 25, left: 50, scale: 0.9 },   // Intelligence: top center
+            { top: 15, left: 88, scale: 2.0 },   // Features: far right, big
+            { top: 50, left: 50, scale: 1.8 },   // CTA: center backdrop
+        ];
+
+        const globe = document.getElementById('globeContainer');
+        const progressFill = document.getElementById('progressFill');
+        const sections = document.querySelectorAll('.scroll-section');
+        const dots = document.querySelectorAll('.nav-dot');
+        let activeSection = 0;
+
+        function updateGlobe(index) {
+            const pos = globePositions[index];
+            const opacity = index === 3 ? 0.35 : 0.8;
+            globe.style.transform = `translate3d(${pos.left}vw, ${pos.top}vh, 0) translate(-50%, -50%) scale(${pos.scale})`;
+            globe.style.opacity = opacity;
+        }
+
+        function updateDots(index) {
+            dots.forEach((d, i) => {
+                d.classList.toggle('active', i === index);
+            });
+        }
+
+        // Scroll handler
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const scrollTop = window.pageYOffset;
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = Math.min(Math.max(scrollTop / docHeight, 0), 1);
+                    progressFill.style.transform = `scaleX(${progress})`;
+
+                    // Find active section
+                    const center = window.innerHeight / 2;
+                    let closest = 0, minDist = Infinity;
+                    sections.forEach((sec, i) => {
+                        const rect = sec.getBoundingClientRect();
+                        const dist = Math.abs(rect.top + rect.height / 2 - center);
+                        if (dist < minDist) { minDist = dist; closest = i; }
+                    });
+
+                    if (closest !== activeSection) {
+                        activeSection = closest;
+                        updateGlobe(activeSection);
+                        updateDots(activeSection);
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // Nav dot clicks
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const idx = parseInt(dot.dataset.section);
+                sections[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+
+        // Init
+        updateGlobe(0);
+    </script>
+</body>
+</html>

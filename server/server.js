@@ -28,13 +28,19 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-// Serve welcome.html as the default landing page
+// Serve welcome.html as the immersive landing page at root
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'client', 'welcome.html'));
 });
 
-// Serve static client files
-app.use(express.static(path.join(__dirname, '..', 'client')));
+// Serve all static client files (HTML, CSS, JS, assets) with no caching in dev
+app.use(express.static(path.join(__dirname, '..', 'client'), {
+    etag: false,
+    lastModified: false,
+    setHeaders: (res) => {
+        res.setHeader('Cache-Control', 'no-store');
+    }
+}));
 
 // ========================================
 // Product Routes
@@ -223,5 +229,5 @@ app.get('/api/orders', async (req, res) => {
 // Start Server
 // ========================================
 app.listen(port, () => {
-    console.log(`AgriCoop Server running at http://localhost:${port} using Firebase Firestore`);
+    console.log(`? F3: Fresh From Farm server running at http://localhost:${port} using Firebase Firestore`);
 });

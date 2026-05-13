@@ -41,7 +41,27 @@ window.selectRole = function(role) {
     selectedRole = role;
     ['customer', 'farmer'].forEach(r => {
         const btn = document.getElementById('btn-' + r);
-        if (btn) btn.classList.toggle('active', r === role);
+        if (!btn) return;
+        if (r === role) {
+            // Active state — gold highlight
+            btn.style.border = '2px solid #D4A017';
+            btn.style.background = 'rgba(212, 160, 23, 0.12)';
+            btn.style.transform = 'translateY(-4px) scale(1.05)';
+            btn.style.boxShadow = '0 0 25px rgba(212,160,23,0.3), 0 10px 40px -10px rgba(212,160,23,0.4)';
+            btn.style.transition = 'all 0.3s ease';
+            // Gold text on label
+            const label = btn.querySelector('span:last-child');
+            if (label) label.style.color = '#D4A017';
+        } else {
+            // Inactive state
+            btn.style.border = '2px solid rgba(255,255,255,0.1)';
+            btn.style.background = 'rgba(255,255,255,0.05)';
+            btn.style.transform = '';
+            btn.style.boxShadow = '';
+            btn.style.transition = 'all 0.3s ease';
+            const label = btn.querySelector('span:last-child');
+            if (label) label.style.color = '';
+        }
     });
 };
 

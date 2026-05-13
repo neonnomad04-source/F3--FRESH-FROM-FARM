@@ -69,13 +69,19 @@ window.selectRole = function(role) {
 // ========================================
 // Boot everything after DOM + sidebar are ready
 // ========================================
-document.addEventListener('DOMContentLoaded', () => {
+function bootApp() {
     // Highlight the saved/default role
     window.selectRole(selectedRole);
 
     // Wait a tick for sidebar.js to inject its HTML, then wire up auth
     setTimeout(initAuth, 50);
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootApp);
+} else {
+    bootApp();
+}
 
 function initAuth() {
     const authModal   = document.getElementById('auth-modal');

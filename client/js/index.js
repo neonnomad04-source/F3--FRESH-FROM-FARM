@@ -3,7 +3,7 @@
 // index.js - Firebase Auth, Registration, UI
 // ========================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
@@ -25,11 +25,12 @@ const firebaseConfig = {
 // ========================================
 let app, auth, db;
 try {
-    app = initializeApp(firebaseConfig);
+    // Use existing app if already initialized (avoids duplicate-app crash)
+    app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
 } catch (e) {
-    console.warn("Firebase not properly configured:", e);
+    console.error("Firebase initialization failed:", e);
 }
 
 // ========================================
@@ -127,10 +128,14 @@ function initAuth() {
 
             if (isLoginMode) {
                 const cred = await signInWithEmailAndPassword(auth, email, password);
-                // Try to load role from Firestore
-                const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
-                const snap = await getDoc(doc(db, "users", cred.user.uid));
-                if (snap.exists() && snap.data().role) selectedRole = snap.data().role;
+                // Try to load role from Firestore (non-fatal — fall back to selected role)
+                try {
+                    const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
+                    const snap = await getDoc(doc(db, "users", cred.user.uid));
+                    if (snap.exists() && snap.data().role) selectedRole = snap.data().role;
+                } catch (fsErr) {
+                    console.warn("Could not fetch role from Firestore, using selected role:", fsErr.message);
+                }
 
             } else {
                 const cred = await createUserWithEmailAndPassword(auth, email, password);

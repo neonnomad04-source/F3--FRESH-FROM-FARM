@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = 'http://localhost:3005/api';
+    const API_BASE = '/api';
     const WEATHER_KEY = ""; // Optional: OpenWeatherMap free key
 
     const form = document.getElementById('calendar-form');

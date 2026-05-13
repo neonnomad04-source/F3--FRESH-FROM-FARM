@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = 'http://localhost:3005/api';
+    const API_BASE = '/api';
 
     const form = document.getElementById('disease-form');
     const imageInput = document.getElementById('crop-image');

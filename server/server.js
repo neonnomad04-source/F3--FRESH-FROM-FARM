@@ -230,8 +230,12 @@ app.get('/api/orders', async (req, res) => {
 });
 
 // ========================================
-// Start Server
+// Start Server (local dev) or export for Vercel serverless
 // ========================================
-app.listen(port, () => {
-    console.log(`? F3: Fresh From Farm server running at http://localhost:${port} using Firebase Firestore`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`✅ F3: Fresh From Farm server running at http://localhost:${port}`);
+    });
+}
+
+export default app;

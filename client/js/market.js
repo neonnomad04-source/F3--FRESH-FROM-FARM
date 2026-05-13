@@ -2,7 +2,7 @@
 // F3 - Dynamic Marketplace & Cart
 // ========================================
 
-const API_BASE = 'http://localhost:3005/api';
+const API_BASE = '/api';
 const currentUserEmail = localStorage.getItem('userEmail') || 'customer@example.com';
 
 let cart = JSON.parse(localStorage.getItem('agriCart')) || [];

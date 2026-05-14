@@ -21,11 +21,16 @@ router.post('/groq', async (req, res) => {
                 'Authorization': `Bearer ${GROQ_API_KEY}`
             },
             body: JSON.stringify({
-                model: model === "llama-3.3-70b-versatile" ? "llama-3.1-8b-instant" : model,
-                max_tokens: 1500,
+                model: model, // Use the high-performance 70B model by default
+                max_tokens: 2000,
                 ...(jsonMode && { response_format: { type: "json_object" } }),
                 messages: [
-                    { role: "system", content: jsonMode ? "You output concise JSON strictly. Be brief but accurate." : "You are a helpful agricultural assistant." },
+                    { 
+                        role: "system", 
+                        content: jsonMode 
+                            ? "You are a world-class PhD Agronomist and Plant Pathologist specializing in precision agriculture. Provide high-precision, data-driven analysis based on specific Indian regional conditions. Output strictly valid JSON. Be scientifically accurate." 
+                            : "You are an expert agricultural assistant." 
+                    },
                     { role: "user", content: prompt }
                 ]
             })

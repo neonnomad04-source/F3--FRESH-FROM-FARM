@@ -25,7 +25,6 @@ const firebaseConfig = {
 // ========================================
 let app, auth, db;
 try {
-    // Use existing app if already initialized (avoids duplicate-app crash)
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
@@ -34,49 +33,86 @@ try {
 }
 
 // ========================================
-// Role Selector Logic (available globally for onclick)
+// Global Auth State
 // ========================================
 let selectedRole = localStorage.getItem('userRole') || 'customer';
+let isLoginMode = true;
 
+// ========================================
+// Role Selector — called via inline onclick in HTML
+// ========================================
 window.selectRole = function(role) {
     selectedRole = role;
     ['customer', 'farmer'].forEach(r => {
         const btn = document.getElementById('btn-' + r);
         if (!btn) return;
-        
-        // Base classes
-        btn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-6 rounded-3xl border-2 transition-all duration-300 relative overflow-hidden group';
-        
+
         if (r === role) {
-            // Active state
-            btn.classList.add('border-agri-gold', 'bg-agri-gold/10', 'scale-[1.02]', 'shadow-xl', 'shadow-agri-gold/20');
+            // ★ ACTIVE — gold border, glow, checkmark
+            btn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-5 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group border-agri-gold bg-agri-gold/10 scale-[1.03] shadow-lg shadow-agri-gold/20';
             btn.innerHTML = `
-                <div class="absolute top-3 right-3 w-5 h-5 bg-agri-gold rounded-full flex items-center justify-center text-agri-dark">
+                <div class="absolute top-2 right-2 w-5 h-5 bg-agri-gold rounded-full flex items-center justify-center text-agri-dark">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                 </div>
-                <span class="text-3xl filter drop-shadow-md transform transition-transform group-hover:scale-110">${r === 'customer' ? '🛒' : '🌾'}</span>
-                <span class="text-sm font-black text-agri-gold uppercase tracking-widest mt-1">${r}</span>
+                <span class="text-3xl">${r === 'customer' ? '🛒' : '🌾'}</span>
+                <span class="text-[11px] font-black text-agri-gold uppercase tracking-widest">${r.charAt(0).toUpperCase() + r.slice(1)}</span>
             `;
         } else {
-            // Inactive state
-            btn.classList.add('border-slate-200', 'dark:border-white/5', 'bg-slate-50', 'dark:bg-slate-800/30', 'hover:bg-slate-100', 'dark:hover:bg-slate-800/80', 'opacity-70', 'hover:opacity-100');
+            // ○ INACTIVE — muted, greyed out
+            btn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-5 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 opacity-60 hover:opacity-90 hover:border-agri-gold/30';
             btn.innerHTML = `
-                <span class="text-3xl filter grayscale opacity-60 transform transition-transform group-hover:scale-110">${r === 'customer' ? '🛒' : '🌾'}</span>
-                <span class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">${r}</span>
+                <span class="text-3xl grayscale">${r === 'customer' ? '🛒' : '🌾'}</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">${r.charAt(0).toUpperCase() + r.slice(1)}</span>
             `;
         }
     });
+
+    // Update feedback text
+    const fb = document.getElementById('role-feedback');
+    const fbText = document.getElementById('role-feedback-text');
+    if (fb) { fb.style.opacity = '1'; }
+    if (fbText) { fbText.textContent = role.charAt(0).toUpperCase() + role.slice(1); }
 };
 
 // ========================================
-// Boot everything after DOM + sidebar are ready
+// Toggle Login ↔ Register — called via inline onclick in HTML
+// ========================================
+window._toggleAuthMode = function() {
+    isLoginMode = !isLoginMode;
+
+    const modalTitle    = document.getElementById('modal-title');
+    const modalDesc     = document.getElementById('modal-desc');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
+    const authToggleText= document.getElementById('auth-toggle-text');
+    const authToggleBtn = document.getElementById('auth-toggle-btn');
+    const authError     = document.getElementById('auth-error');
+
+    if (authError) authError.classList.add('hidden');
+
+    if (isLoginMode) {
+        if (modalTitle)    modalTitle.textContent   = 'Welcome Back';
+        if (modalDesc)     modalDesc.textContent    = 'Sign in to your F3 workspace';
+        if (authSubmitBtn) authSubmitBtn.textContent = 'Sign In';
+        if (authToggleText) authToggleText.textContent = 'New member?';
+        if (authToggleBtn) authToggleBtn.textContent = 'Register Account';
+    } else {
+        if (modalTitle)    modalTitle.textContent   = 'Create Account';
+        if (modalDesc)     modalDesc.textContent    = 'Join the F3 farming network';
+        if (authSubmitBtn) authSubmitBtn.textContent = 'Register & Enter';
+        if (authToggleText) authToggleText.textContent = 'Already have an account?';
+        if (authToggleBtn) authToggleBtn.textContent = 'Sign In Instead';
+    }
+};
+
+// ========================================
+// Boot after DOM ready
 // ========================================
 function bootApp() {
-    // Highlight the saved/default role
+    // Apply the default role selection visually
     window.selectRole(selectedRole);
 
-    // Wait a tick for sidebar.js to inject its HTML, then wire up auth
-    setTimeout(initAuth, 50);
+    // Small delay to let sidebar.js inject first
+    setTimeout(initAuth, 80);
 }
 
 if (document.readyState === 'loading') {
@@ -85,42 +121,18 @@ if (document.readyState === 'loading') {
     bootApp();
 }
 
+// ========================================
+// Core Auth Wiring
+// ========================================
 function initAuth() {
-    const authModal   = document.getElementById('auth-modal');
-    const authForm    = document.getElementById('auth-form');
-    const authEmail   = document.getElementById('auth-email');
-    const authPassword= document.getElementById('auth-password');
-    const authToggleBtn = document.getElementById('auth-toggle-btn');
-    const modalTitle  = document.getElementById('modal-title');
-    const modalDesc   = document.getElementById('modal-desc');
-    const authSubmitBtn = document.getElementById('auth-submit-btn');
-    const authToggleText= document.getElementById('auth-toggle-text');
-    const authError   = document.getElementById('auth-error');
+    const authModal    = document.getElementById('auth-modal');
+    const authForm     = document.getElementById('auth-form');
+    const authEmail    = document.getElementById('auth-email');
+    const authPassword = document.getElementById('auth-password');
+    const authSubmitBtn= document.getElementById('auth-submit-btn');
+    const authError    = document.getElementById('auth-error');
 
-    if (!authForm) return; // not on a page with auth modal
-
-    let isLoginMode = true;
-
-    // ── Toggle Login / Register ──────────────────────────────
-    if (authToggleBtn) {
-        authToggleBtn.addEventListener('click', () => {
-            isLoginMode = !isLoginMode;
-            authError?.classList.add('hidden');
-            if (isLoginMode) {
-                if (modalTitle)   modalTitle.textContent  = 'Welcome Back';
-                if (modalDesc)    modalDesc.textContent   = 'Sign in to your F3 account';
-                if (authSubmitBtn)authSubmitBtn.textContent = 'Sign In';
-                if (authToggleText) authToggleText.textContent = "Don't have an account?";
-                authToggleBtn.textContent = 'Register now';
-            } else {
-                if (modalTitle)   modalTitle.textContent  = 'Create Account';
-                if (modalDesc)    modalDesc.textContent   = 'Join the F3 network';
-                if (authSubmitBtn)authSubmitBtn.textContent = 'Register';
-                if (authToggleText) authToggleText.textContent = 'Already have an account?';
-                authToggleBtn.textContent = 'Sign in';
-            }
-        });
-    }
+    if (!authForm) return; // not on a page with the auth modal
 
     // ── Form Submit ──────────────────────────────────────────
     authForm.addEventListener('submit', async (e) => {
@@ -128,46 +140,47 @@ function initAuth() {
         const email    = authEmail.value.trim();
         const password = authPassword.value;
         if (authError) authError.classList.add('hidden');
-        if (authSubmitBtn) { authSubmitBtn.disabled = true; authSubmitBtn.style.opacity = '0.7'; }
+        if (authSubmitBtn) { authSubmitBtn.disabled = true; authSubmitBtn.textContent = 'Please wait...'; }
 
         try {
-            // Only require role selection if registering
-            if (!isLoginMode && !selectedRole) throw new Error("Please select Customer or Farmer to register.");
-            if (!auth)         throw new Error("Firebase is not configured correctly.");
+            if (!selectedRole) throw new Error("Please select Customer or Farmer first.");
+            if (!auth) throw new Error("Firebase is not configured correctly.");
 
             if (isLoginMode) {
+                // ── SIGN IN ──
                 const cred = await signInWithEmailAndPassword(auth, email, password);
-                // Try to load role from Firestore (non-fatal — fall back to selected role or default)
+                // Fetch role from Firestore
                 try {
                     const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
                     const snap = await getDoc(doc(db, "users", cred.user.uid));
                     if (snap.exists() && snap.data().role) {
                         selectedRole = snap.data().role;
-                    } else if (!selectedRole) {
-                        selectedRole = 'customer'; // safe default if missing
                     }
                 } catch (fsErr) {
-                    console.warn("Could not fetch role from Firestore, using selected role:", fsErr.message);
-                    if (!selectedRole) selectedRole = 'customer';
+                    console.warn("Could not fetch role from Firestore:", fsErr.message);
                 }
 
             } else {
+                // ── REGISTER ──
+                if (!selectedRole) throw new Error("Please select Customer or Farmer to register.");
                 const cred = await createUserWithEmailAndPassword(auth, email, password);
                 const { setDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
                 await setDoc(doc(db, "users", cred.user.uid), {
                     email, role: selectedRole, createdAt: serverTimestamp()
                 });
-                await sendEmailVerification(cred.user);
-                F3Toast.info('Verification email sent! Check your inbox.');
+                try { await sendEmailVerification(cred.user); } catch(_){}
+                F3Toast.info('Account created! Verification email sent.');
             }
 
+            // Persist auth state
             localStorage.setItem('userRole', selectedRole);
             localStorage.setItem('userEmail', email);
 
+            // Close modal
             if (authModal) authModal.classList.add('hidden');
             authForm.reset();
 
-            F3Toast.success(`Welcome back, ${email}! Signed in as ${selectedRole.toUpperCase()} 🎉`);
+            F3Toast.success(`Welcome, ${email}! Signed in as ${selectedRole.toUpperCase()} 🎉`);
 
             // Redirect based on role
             setTimeout(() => {
@@ -177,17 +190,21 @@ function initAuth() {
 
         } catch (error) {
             console.error("Auth error:", error);
-            const msg = error.code === 'auth/invalid-credential' ? 'Invalid email or password.'
-                      : error.code === 'auth/email-already-in-use' ? 'Email already registered. Sign in instead.'
+            const msg = error.code === 'auth/invalid-credential' ? 'Invalid email or password. Please try again.'
+                      : error.code === 'auth/email-already-in-use' ? 'This email is already registered. Try signing in instead.'
                       : error.code === 'auth/weak-password' ? 'Password must be at least 6 characters.'
+                      : error.code === 'auth/invalid-email' ? 'Please enter a valid email address.'
                       : error.message;
             if (authError) { authError.textContent = msg; authError.classList.remove('hidden'); }
         } finally {
-            if (authSubmitBtn) { authSubmitBtn.disabled = false; authSubmitBtn.style.opacity = '1'; }
+            if (authSubmitBtn) {
+                authSubmitBtn.disabled = false;
+                authSubmitBtn.textContent = isLoginMode ? 'Sign In' : 'Register & Enter';
+            }
         }
     });
 
-    // ── Sign In button in old sidebar (non-injected pages) ──
+    // ── Sidebar Sign In button (non-injected pages) ──
     const oldAuthBtn = document.getElementById('auth-btn');
     if (oldAuthBtn && authModal) {
         oldAuthBtn.addEventListener('click', () => authModal.classList.remove('hidden'));

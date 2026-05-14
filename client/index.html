@@ -322,47 +322,58 @@
     <div id="auth-modal" class="fixed inset-0 z-[200] hidden">
         <div class="fixed inset-0 bg-agri-dark/80 backdrop-blur-xl transition-opacity" onclick="document.getElementById('auth-modal').classList.add('hidden')"></div>
         <div class="fixed inset-0 flex items-center justify-center p-6 pointer-events-none">
-            <div class="bg-white dark:bg-slate-900 rounded-[3.5rem] shadow-2xl w-full max-w-md p-12 relative pointer-events-auto transform transition-all border border-slate-100 dark:border-white/5 animate-slide-up">
-                <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="absolute top-8 right-8 text-slate-300 hover:text-slate-500 transition-colors">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <div class="bg-white dark:bg-[#1a1207] rounded-[3rem] shadow-2xl w-full max-w-md p-10 relative pointer-events-auto transform transition-all border border-slate-100 dark:border-agri-gold/10 animate-slide-up">
+                <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="absolute top-6 right-6 text-slate-300 hover:text-slate-500 transition-colors">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
                 
-                <div class="text-center mb-12">
-                    <img src="./assets/f3_logo.png" alt="F3 Logo" class="w-16 h-16 rounded-2xl mx-auto mb-6 object-contain bg-white">
-                    <h3 id="modal-title" class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Welcome</h3>
-                    <p id="modal-desc" class="text-slate-400 mt-2 font-medium">Join the intelligent farming network</p>
+                <div class="text-center mb-8">
+                    <img src="./assets/f3_logo.png" alt="F3 Logo" class="w-14 h-14 rounded-2xl mx-auto mb-4 object-contain bg-white shadow-lg">
+                    <h3 id="modal-title" class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">Welcome</h3>
+                    <p id="modal-desc" class="text-slate-400 mt-1 text-sm font-medium">Sign in to your F3 workspace</p>
                 </div>
 
-                <div id="auth-error" class="hidden mb-6 p-5 bg-red-50 text-red-600 text-xs rounded-2xl font-black text-center border border-red-100"></div>
+                <div id="auth-error" class="hidden mb-4 p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-2xl font-black text-center border border-red-100 dark:border-red-800/30"></div>
 
-                <form id="auth-form" class="space-y-6">
+                <form id="auth-form" class="space-y-5">
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Choose Your Identity</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <button type="button" onclick="selectRole('customer')" id="btn-customer" class="role-btn">
-                                <span class="text-2xl">🛒</span>
-                                <span class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">Customer</span>
+                        <label class="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Choose Your Identity</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button type="button" onclick="selectRole('customer')" id="btn-customer"
+                                class="role-btn flex flex-col items-center justify-center gap-2 p-5 rounded-2xl border-2 border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 transition-all duration-300 relative overflow-hidden group hover:border-agri-gold/40">
+                                <span class="text-3xl">🛒</span>
+                                <span class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Customer</span>
                             </button>
-                            <button type="button" onclick="selectRole('farmer')" id="btn-farmer" class="role-btn">
-                                <span class="text-2xl">🌾</span>
-                                <span class="text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest">Farmer</span>
+                            <button type="button" onclick="selectRole('farmer')" id="btn-farmer"
+                                class="role-btn flex flex-col items-center justify-center gap-2 p-5 rounded-2xl border-2 border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 transition-all duration-300 relative overflow-hidden group hover:border-agri-gold/40">
+                                <span class="text-3xl">🌾</span>
+                                <span class="text-[11px] font-black text-slate-500 uppercase tracking-widest">Farmer</span>
                             </button>
+                        </div>
+                        <div id="role-feedback" class="mt-2 text-center text-[10px] font-black uppercase tracking-widest text-agri-gold opacity-0 transition-opacity duration-300">
+                            ✓ Selected: <span id="role-feedback-text">Customer</span>
                         </div>
                     </div>
                     
-                    <div class="space-y-4">
-                        <input type="email" id="auth-email" placeholder="Email Address" required class="w-full px-6 py-5 rounded-2xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50 outline-none focus:border-agri-green dark:focus:border-agri-gold transition-all text-sm font-bold">
-                        <input type="password" id="auth-password" placeholder="Password" required class="w-full px-6 py-5 rounded-2xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-slate-800/50 outline-none focus:border-agri-green dark:focus:border-agri-gold transition-all text-sm font-bold">
+                    <div class="space-y-3">
+                        <input type="email" id="auth-email" placeholder="Email Address" required 
+                            class="w-full px-5 py-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 outline-none focus:border-agri-gold focus:ring-2 focus:ring-agri-gold/20 transition-all text-sm font-bold text-slate-800 dark:text-white placeholder-slate-400">
+                        <input type="password" id="auth-password" placeholder="Password (min 6 chars)" required 
+                            class="w-full px-5 py-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 outline-none focus:border-agri-gold focus:ring-2 focus:ring-agri-gold/20 transition-all text-sm font-bold text-slate-800 dark:text-white placeholder-slate-400">
                     </div>
 
-                    <button type="submit" id="auth-submit-btn" class="w-full bg-agri-dark dark:bg-agri-gold dark:text-agri-dark text-white font-black py-5 rounded-[1.5rem] mt-4 transition-all shadow-2xl hover:scale-[1.02] active:scale-95 uppercase tracking-widest text-xs">
-                        Enter Workspace
+                    <button type="submit" id="auth-submit-btn" 
+                        class="w-full bg-agri-gold text-agri-dark font-black py-4 rounded-2xl mt-2 transition-all shadow-xl shadow-agri-gold/20 hover:shadow-2xl hover:shadow-agri-gold/30 hover:scale-[1.01] active:scale-95 uppercase tracking-widest text-xs">
+                        Sign In
                     </button>
                 </form>
 
-                <div class="mt-10 text-center">
-                    <span id="auth-toggle-text" class="text-slate-400 font-medium">New member?</span>
-                    <button id="auth-toggle-btn" class="text-agri-green-light dark:text-agri-gold font-black ml-1 uppercase tracking-widest text-[10px] hover:underline">Register Account</button>
+                <div class="mt-6 text-center">
+                    <span id="auth-toggle-text" class="text-slate-400 text-sm font-medium">New member?</span>
+                    <button id="auth-toggle-btn" onclick="window._toggleAuthMode()" 
+                        class="text-agri-gold font-black ml-1 uppercase tracking-widest text-[10px] hover:underline hover:text-agri-gold/80 transition-colors">
+                        Register Account
+                    </button>
                 </div>
             </div>
         </div>

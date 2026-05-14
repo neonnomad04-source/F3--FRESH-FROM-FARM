@@ -122,4 +122,22 @@
         overlay.classList.add('active');
         setTimeout(() => { window.location.href = href; }, 250);
     }, true);
+
+    // Global: Show logged-in email clearly on page headers
+    document.addEventListener('DOMContentLoaded', () => {
+        const email = localStorage.getItem('userEmail');
+        if (email) {
+            // Find the main header text container on most pages
+            const headers = document.querySelectorAll('header > div:first-child, nav > div:first-child');
+            headers.forEach(h => {
+                // Don't add to the sidebar or places that already have it
+                if (!h.querySelector('.f3-logged-in-pill') && !h.closest('#main-sidebar')) {
+                    const pill = document.createElement('div');
+                    pill.className = "f3-logged-in-pill mt-4 px-4 py-2 bg-agri-dark/5 dark:bg-white/5 backdrop-blur-md rounded-xl border border-agri-dark/10 dark:border-white/10 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 inline-flex items-center gap-2 animate-slide-up shadow-sm";
+                    pill.innerHTML = `<div class="w-2 h-2 rounded-full bg-agri-green animate-pulse"></div> Verified: <span class="text-agri-dark dark:text-white">${email}</span>`;
+                    h.appendChild(pill);
+                }
+            });
+        }
+    });
 })();

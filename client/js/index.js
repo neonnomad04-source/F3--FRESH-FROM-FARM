@@ -165,11 +165,12 @@ function initAuth() {
             if (authModal) authModal.classList.add('hidden');
             authForm.reset();
 
-            F3Toast.success(`Welcome! Signed in as ${selectedRole} 🎉`);
+            F3Toast.success(`Welcome back, ${email}! Signed in as ${selectedRole.toUpperCase()} 🎉`);
 
             // Redirect based on role
             setTimeout(() => {
-                window.location.href = selectedRole === 'farmer' ? 'farmer-orders.html' : 'market.html';
+                const r = (selectedRole || '').toLowerCase();
+                window.location.href = r === 'farmer' ? 'inventory.html' : 'market.html';
             }, 800);
 
         } catch (error) {

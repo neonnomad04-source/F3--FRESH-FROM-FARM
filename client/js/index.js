@@ -129,18 +129,24 @@ function initAuth() {
         if (authSubmitBtn) { authSubmitBtn.disabled = true; authSubmitBtn.style.opacity = '0.7'; }
 
         try {
-            if (!selectedRole) throw new Error("Please select Customer or Farmer to continue.");
+            // Only require role selection if registering
+            if (!isLoginMode && !selectedRole) throw new Error("Please select Customer or Farmer to register.");
             if (!auth)         throw new Error("Firebase is not configured correctly.");
 
             if (isLoginMode) {
                 const cred = await signInWithEmailAndPassword(auth, email, password);
-                // Try to load role from Firestore (non-fatal — fall back to selected role)
+                // Try to load role from Firestore (non-fatal — fall back to selected role or default)
                 try {
                     const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js");
                     const snap = await getDoc(doc(db, "users", cred.user.uid));
-                    if (snap.exists() && snap.data().role) selectedRole = snap.data().role;
+                    if (snap.exists() && snap.data().role) {
+                        selectedRole = snap.data().role;
+                    } else if (!selectedRole) {
+                        selectedRole = 'customer'; // safe default if missing
+                    }
                 } catch (fsErr) {
                     console.warn("Could not fetch role from Firestore, using selected role:", fsErr.message);
+                    if (!selectedRole) selectedRole = 'customer';
                 }
 
             } else {

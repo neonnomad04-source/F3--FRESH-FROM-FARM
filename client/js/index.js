@@ -43,25 +43,27 @@ window.selectRole = function(role) {
     ['customer', 'farmer'].forEach(r => {
         const btn = document.getElementById('btn-' + r);
         if (!btn) return;
+        
+        // Base classes
+        btn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-6 rounded-3xl border-2 transition-all duration-300 relative overflow-hidden group';
+        
         if (r === role) {
-            // Active state — gold highlight
-            btn.style.border = '2px solid #D4A017';
-            btn.style.background = 'rgba(212, 160, 23, 0.12)';
-            btn.style.transform = 'translateY(-4px) scale(1.05)';
-            btn.style.boxShadow = '0 0 25px rgba(212,160,23,0.3), 0 10px 40px -10px rgba(212,160,23,0.4)';
-            btn.style.transition = 'all 0.3s ease';
-            // Gold text on label
-            const label = btn.querySelector('span:last-child');
-            if (label) label.style.color = '#D4A017';
+            // Active state
+            btn.classList.add('border-agri-gold', 'bg-agri-gold/10', 'scale-[1.02]', 'shadow-xl', 'shadow-agri-gold/20');
+            btn.innerHTML = `
+                <div class="absolute top-3 right-3 w-5 h-5 bg-agri-gold rounded-full flex items-center justify-center text-agri-dark">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <span class="text-3xl filter drop-shadow-md transform transition-transform group-hover:scale-110">${r === 'customer' ? '🛒' : '🌾'}</span>
+                <span class="text-sm font-black text-agri-gold uppercase tracking-widest mt-1">${r}</span>
+            `;
         } else {
             // Inactive state
-            btn.style.border = '2px solid rgba(255,255,255,0.1)';
-            btn.style.background = 'rgba(255,255,255,0.05)';
-            btn.style.transform = '';
-            btn.style.boxShadow = '';
-            btn.style.transition = 'all 0.3s ease';
-            const label = btn.querySelector('span:last-child');
-            if (label) label.style.color = '';
+            btn.classList.add('border-slate-200', 'dark:border-white/5', 'bg-slate-50', 'dark:bg-slate-800/30', 'hover:bg-slate-100', 'dark:hover:bg-slate-800/80', 'opacity-70', 'hover:opacity-100');
+            btn.innerHTML = `
+                <span class="text-3xl filter grayscale opacity-60 transform transition-transform group-hover:scale-110">${r === 'customer' ? '🛒' : '🌾'}</span>
+                <span class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">${r}</span>
+            `;
         }
     });
 };

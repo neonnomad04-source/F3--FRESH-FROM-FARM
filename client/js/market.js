@@ -307,7 +307,7 @@ async function checkout() {
         F3Toast.error('Checkout failed. Please check your network connection.');
     } finally {
         btn.disabled = false;
-        btn.innerText = 'Order Now';
+        btn.innerText = 'ORDER NOW';
     }
 }
 

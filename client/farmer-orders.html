@@ -117,7 +117,20 @@
                 // Manual sort by createdAt
                 orders.sort((a,b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
 
-                body.innerHTML = orders.map(o => `
+                body.innerHTML = orders.map(o => {
+                    let actionButton = '';
+                    let statusClass = 'bg-amber-100 dark:bg-amber-900/30 text-amber-700';
+
+                    if (o.status === 'Processing') {
+                        actionButton = `<button onclick="confirmOrder('${o.id}')" class="text-[9px] font-black uppercase tracking-widest text-agri-gold hover:underline">Confirm Order</button>`;
+                    } else if (o.status === 'Confirmed') {
+                        statusClass = 'bg-blue-100 dark:bg-blue-900/30 text-blue-700';
+                        actionButton = `<button onclick="markDelivered('${o.id}', '${o.product_id}', ${o.quantity})" class="text-[9px] font-black uppercase tracking-widest text-agri-green-light hover:underline">Mark Delivered</button>`;
+                    } else if (o.status === 'Delivered') {
+                        statusClass = 'bg-green-100 dark:bg-green-900/30 text-green-700';
+                    }
+
+                    return `
                     <tr class="hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
                         <td class="px-10 py-6">
                             <p class="text-slate-900 dark:text-white">${o.user_email}</p>
@@ -135,33 +148,54 @@
                         </td>
                         <td class="px-10 py-6">
                             <div class="flex items-center gap-3">
-                                <span class="px-3 py-1 ${o.status === 'Delivered' ? 'bg-green-100 dark:bg-green-900/30 text-green-700' : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700'} rounded-full text-[9px] font-black uppercase tracking-widest">${o.status || 'Processing'}</span>
-                                ${o.status !== 'Delivered' ? `<button onclick="markDelivered('${o.id}')" class="text-[9px] font-black uppercase tracking-widest text-agri-green-light hover:underline">Mark Delivered</button>` : ''}
+                                <span class="px-3 py-1 ${statusClass} rounded-full text-[9px] font-black uppercase tracking-widest">${o.status || 'Processing'}</span>
+                                ${actionButton}
                             </div>
                         </td>
                     </tr>
-                `).join('');
+                `}).join('');
             }, (err) => {
                 console.error('Order Sync Error:', err);
                 body.innerHTML = `<tr><td colspan="5" class="px-10 py-20 text-center text-red-500 font-bold">Cloud Sync Failed.</td></tr>`;
             });
         }
 
-        async function markDelivered(orderId) {
+        async function confirmOrder(orderId) {
             try {
+                await db.collection('orders').doc(orderId).update({
+                    status: 'Confirmed'
+                });
+                showToast('Order Confirmed! Prepare for delivery.');
+            } catch (err) {
+                console.error(err);
+                F3Toast.error('Update failed: ' + err.message);
+            }
+        }
+
+        async function markDelivered(orderId, productId, quantity) {
+            try {
+                // 1. Update Order Status
                 await db.collection('orders').doc(orderId).update({
                     status: 'Delivered'
                 });
-                showToast('Success! Order status updated.');
+
+                // 2. Update Inventory (Reduce Stock)
+                if (productId) {
+                    await db.collection('products').doc(productId).update({
+                        quantity: firebase.firestore.FieldValue.increment(-quantity)
+                    });
+                }
+
+                showToast('Success! Order delivered and inventory updated.');
             } catch (err) {
                 console.error(err);
-                alert('Update failed: ' + err.message);
+                F3Toast.error('Delivery update failed: ' + err.message);
             }
         }
 
         function showToast(msg) {
             const toast = document.createElement('div');
-            toast.className = 'fixed top-12 left-1/2 -translate-x-1/2 z-[300] bg-agri-dark text-white px-8 py-4 rounded-2xl font-bold shadow-2xl animate-fade-in';
+            toast.className = 'fixed top-12 left-1/2 -translate-x-1/2 z-[300] bg-agri-dark text-white px-8 py-4 rounded-2xl font-bold shadow-2xl animate-fade-in border border-white/10';
             toast.innerText = msg;
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);

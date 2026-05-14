@@ -120,7 +120,7 @@ function createProductCard(p) {
                         <p class="font-black text-dark leading-none text-xl">₹${p.price}</p>
                     </div>
                 </div>
-                <button onclick="event.stopPropagation(); addToCart('${p.name}', ${p.price}, '${p.image_url}', '${p.farmer_email}')" class="w-full py-2.5 bg-primary hover:bg-dark text-white rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2">
+                <button onclick="event.stopPropagation(); addToCart('${p.id}', '${p.name}', ${p.price}, '${p.image_url}', '${p.farmer_email}')" class="w-full py-2.5 bg-primary hover:bg-dark text-white rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     Add to Basket
                 </button>
@@ -132,12 +132,12 @@ function createProductCard(p) {
 // ========================================
 // Cart Logic
 // ========================================
-function addToCart(name, price, img, farmer) {
-    const existing = cart.find(item => item.name === name);
+function addToCart(id, name, price, img, farmer) {
+    const existing = cart.find(item => item.id === id);
     if (existing) {
         existing.qty += 1;
     } else {
-        cart.push({ name, price, img, farmer, qty: 1 });
+        cart.push({ id, name, price, img, farmer, qty: 1 });
     }
     
     saveCart();
@@ -275,6 +275,7 @@ async function checkout() {
         const orderPromises = cart.map(item => {
             return db.collection('orders').add({
                 user_email: currentUserEmail,
+                product_id: item.id,
                 product_name: item.name,
                 category: 'Marketplace',
                 quantity: item.qty,

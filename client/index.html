@@ -384,6 +384,63 @@
     <script src="./js/components/sidebar.js"></script>
 
     <script src="./js/common.js"></script>
+
+    <!-- Auth UI functions — must load IMMEDIATELY (before module) -->
+    <script>
+        // These run synchronously so onclick handlers work instantly
+        window._selectedRole = localStorage.getItem('userRole') || 'customer';
+        window._isLoginMode = true;
+
+        window.selectRole = function(role) {
+            window._selectedRole = role;
+            ['customer', 'farmer'].forEach(function(r) {
+                var btn = document.getElementById('btn-' + r);
+                if (!btn) return;
+                if (r === role) {
+                    btn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-5 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group border-agri-gold bg-agri-gold/10 scale-[1.03] shadow-lg shadow-agri-gold/20';
+                    btn.innerHTML = '<div class="absolute top-2 right-2 w-5 h-5 bg-agri-gold rounded-full flex items-center justify-center text-agri-dark"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div><span class="text-3xl">' + (r === 'customer' ? '🛒' : '🌾') + '</span><span class="text-[11px] font-black text-agri-gold uppercase tracking-widest">' + r.charAt(0).toUpperCase() + r.slice(1) + '</span>';
+                } else {
+                    btn.className = 'role-btn flex flex-col items-center justify-center gap-2 p-5 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 opacity-60 hover:opacity-90 hover:border-agri-gold/30';
+                    btn.innerHTML = '<span class="text-3xl grayscale">' + (r === 'customer' ? '🛒' : '🌾') + '</span><span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">' + r.charAt(0).toUpperCase() + r.slice(1) + '</span>';
+                }
+            });
+            var fb = document.getElementById('role-feedback');
+            var fbText = document.getElementById('role-feedback-text');
+            if (fb) fb.style.opacity = '1';
+            if (fbText) fbText.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+        };
+
+        window._toggleAuthMode = function() {
+            window._isLoginMode = !window._isLoginMode;
+            var isLogin = window._isLoginMode;
+            var t = document.getElementById('modal-title');
+            var d = document.getElementById('modal-desc');
+            var s = document.getElementById('auth-submit-btn');
+            var tt = document.getElementById('auth-toggle-text');
+            var tb = document.getElementById('auth-toggle-btn');
+            var e = document.getElementById('auth-error');
+            if (e) e.classList.add('hidden');
+            if (isLogin) {
+                if (t) t.textContent = 'Welcome Back';
+                if (d) d.textContent = 'Sign in to your F3 workspace';
+                if (s) s.textContent = 'Sign In';
+                if (tt) tt.textContent = 'New member?';
+                if (tb) tb.textContent = 'Register Account';
+            } else {
+                if (t) t.textContent = 'Create Account';
+                if (d) d.textContent = 'Join the F3 farming network';
+                if (s) s.textContent = 'Register & Enter';
+                if (tt) tt.textContent = 'Already have an account?';
+                if (tb) tb.textContent = 'Sign In Instead';
+            }
+        };
+
+        // Apply default role selection as soon as DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            window.selectRole(window._selectedRole);
+        });
+    </script>
+
     <script type="module" src="./js/index.js"></script>
 </body>
 </html>

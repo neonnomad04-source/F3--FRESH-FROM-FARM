@@ -267,6 +267,13 @@ async function checkout() {
         return gotoCheckoutStep(1);
     }
 
+    // Proactive Auth Check
+    if (!localStorage.getItem('userEmail')) {
+        F3Toast.error('Session expired. Please login to place orders.');
+        setTimeout(() => window.location.href = 'index.html', 2000);
+        return;
+    }
+
     const btn = document.getElementById('final-checkout-btn');
     btn.disabled = true;
     btn.innerText = 'Syncing with Firebase...';
@@ -275,12 +282,12 @@ async function checkout() {
         const orderPromises = cart.map(item => {
             return db.collection('orders').add({
                 user_email: currentUserEmail,
-                product_id: item.id,
+                product_id: item.id || 'LEGACY_PRODUCT',
                 product_name: item.name,
                 category: 'Marketplace',
                 quantity: item.qty,
                 price: item.price * item.qty,
-                farmer_name: item.farmer,
+                farmer_name: item.farmer || 'F3_DIRECT',
                 phone: phone,
                 address: address,
                 payment_method: selectedPaymentMethod,
@@ -303,8 +310,17 @@ async function checkout() {
             generateQR(total);
         }
     } catch (err) {
-        console.error('Firebase Checkout Error:', err);
-        F3Toast.error('Checkout failed. Please check your network connection.');
+        console.error('Firebase Checkout Critical Error:', err);
+        // Provide more descriptive error if possible
+        let errorMsg = 'Checkout failed. ';
+        if (err.code === 'permission-denied') {
+            errorMsg += 'Security permission denied. Please sign in again.';
+        } else if (!navigator.onLine) {
+            errorMsg += 'No internet connection detected.';
+        } else {
+            errorMsg += 'Please check your connection and try again.';
+        }
+        F3Toast.error(errorMsg);
     } finally {
         btn.disabled = false;
         btn.innerText = 'ORDER NOW';

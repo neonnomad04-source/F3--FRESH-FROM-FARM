@@ -101,10 +101,14 @@
     overlay.id = 'f3-page-transition';
     document.body.appendChild(overlay);
 
-    // Fade in on load
-    window.addEventListener('load', () => {
-        document.body.classList.add('loaded');
-    });
+    // Fade in on load (or immediately if already loaded)
+    function fadeIn() { document.body.classList.add('loaded'); }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        fadeIn();
+    } else {
+        document.addEventListener('DOMContentLoaded', fadeIn);
+        window.addEventListener('load', fadeIn); // Backup
+    }
 
     // Fade out on navigation (skip anchor links and external links)
     document.addEventListener('click', (e) => {

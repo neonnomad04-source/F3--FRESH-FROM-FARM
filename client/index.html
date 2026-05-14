@@ -564,6 +564,11 @@
 
                     if (user) localStorage.setItem('userEmail', user.email);
                 });
+
+                // Auto-open modal if #login hash is present
+                if (window.location.hash === '#login' && modal) {
+                    modal.classList.remove('hidden');
+                }
             }
 
             // Run boot after sidebar.js has injected

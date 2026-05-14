@@ -108,15 +108,15 @@
                             <div class="grid grid-cols-3 gap-4">
                                 <div>
                                     <label class="soil-label">Nitrogen (N)</label>
-                                    <input type="number" id="nitrogen" placeholder="0" class="soil-input">
+                                    <input type="number" id="nitrogen" placeholder="0" class="soil-input" required>
                                 </div>
                                 <div>
                                     <label class="soil-label">Phos. (P)</label>
-                                    <input type="number" id="phosphorus" placeholder="0" class="soil-input">
+                                    <input type="number" id="phosphorus" placeholder="0" class="soil-input" required>
                                 </div>
                                 <div>
                                     <label class="soil-label">Potas. (K)</label>
-                                    <input type="number" id="potassium" placeholder="0" class="soil-input">
+                                    <input type="number" id="potassium" placeholder="0" class="soil-input" required>
                                 </div>
                             </div>
                         </div>
@@ -126,21 +126,26 @@
                             <div class="grid grid-cols-2 gap-6">
                                 <div>
                                     <label class="soil-label">pH Potential</label>
-                                    <input type="number" id="ph" step="0.1" placeholder="7.0" class="soil-input">
+                                    <input type="number" id="ph" step="0.1" placeholder="7.0" class="soil-input" required>
                                 </div>
                                 <div>
                                     <label class="soil-label">Temp (°C)</label>
-                                    <input type="number" id="temp" placeholder="25" class="soil-input">
+                                    <input type="number" id="temp" placeholder="25" class="soil-input" required>
                                 </div>
                                 <div>
                                     <label class="soil-label">Humidity (%)</label>
-                                    <input type="number" id="humidity" placeholder="60" class="soil-input">
+                                    <input type="number" id="humidity" placeholder="60" class="soil-input" required>
                                 </div>
                                 <div>
                                     <label class="soil-label">Rainfall (mm)</label>
-                                    <input type="number" id="rainfall" placeholder="800" class="soil-input">
+                                    <input type="number" id="rainfall" placeholder="800" class="soil-input" required>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label class="soil-label">Visual Soil Analysis</label>
+                            <input type="text" id="visual" placeholder="e.g. Dark, moist, crumbly texture" class="soil-input" required>
                         </div>
 
                         <button type="submit" class="w-full py-6 bg-agri-dark text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95">
@@ -174,17 +179,20 @@
                         <div class="premium-card !p-8 space-y-4 border-l-8 border-indigo-500">
                             <p class="text-[10px] font-black uppercase text-indigo-500 tracking-widest">Nitrogen</p>
                             <p id="n-val" class="text-4xl font-black">0</p>
-                            <span id="n-status" class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[8px] font-black uppercase tracking-widest">Calculating</span>
+                            <div id="n-status" class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[8px] font-black uppercase tracking-widest">Calculating</div>
+                            <p id="n-rec" class="text-[10px] text-slate-400 mt-2 italic">-</p>
                         </div>
                         <div class="premium-card !p-8 space-y-4 border-l-8 border-emerald-500">
                             <p class="text-[10px] font-black uppercase text-emerald-500 tracking-widest">Phosphorus</p>
                             <p id="p-val" class="text-4xl font-black">0</p>
-                            <span id="p-status" class="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[8px] font-black uppercase tracking-widest">Calculating</span>
+                            <div id="p-status" class="inline-block px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[8px] font-black uppercase tracking-widest">Calculating</div>
+                            <p id="p-rec" class="text-[10px] text-slate-400 mt-2 italic">-</p>
                         </div>
                         <div class="premium-card !p-8 space-y-4 border-l-8 border-amber-500">
                             <p class="text-[10px] font-black uppercase text-amber-500 tracking-widest">Potassium</p>
                             <p id="k-val" class="text-4xl font-black">0</p>
-                            <span id="k-status" class="inline-block px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-[8px] font-black uppercase tracking-widest">Calculating</span>
+                            <div id="k-status" class="inline-block px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-[8px] font-black uppercase tracking-widest">Calculating</div>
+                            <p id="k-rec" class="text-[10px] text-slate-400 mt-2 italic">-</p>
                         </div>
                     </div>
 
@@ -211,7 +219,15 @@
                                     <span class="w-6 h-6 rounded-lg bg-white/10 text-white flex items-center justify-center font-black text-[10px] flex-shrink-0 mt-1">3</span>
                                     <div><p class="font-bold text-sm text-white/90">Irrigation Protocol</p><p id="step-irr" class="text-xs text-white/40">-</p></div>
                                 </li>
+                                <li class="flex gap-4">
+                                    <span class="w-6 h-6 rounded-lg bg-white/10 text-white flex items-center justify-center font-black text-[10px] flex-shrink-0 mt-1">4</span>
+                                    <div><p class="font-bold text-sm text-white/90">Monitoring</p><p id="step-mon" class="text-xs text-white/40">-</p></div>
+                                </li>
                             </ul>
+                            <div class="pt-6 border-t border-white/10">
+                                <p class="text-[10px] font-black text-agri-gold uppercase tracking-widest mb-2">Eco-Precision Tip</p>
+                                <p id="eco-tip" class="text-xs text-white/60 leading-relaxed italic">-</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,6 +235,11 @@
 
         </div>
     </main>
+
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
     <script src="./js/components/ui.js"></script>
     <script src="./js/components/sidebar.js"></script>

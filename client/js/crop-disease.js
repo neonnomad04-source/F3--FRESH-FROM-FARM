@@ -45,6 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('param-soil').value = 'Loamy';
             document.getElementById('param-fert').value = 'NONE';
             document.getElementById('param-pest').value = 'NONE';
+            
+            // Set Demo Image
+            imagePreview.style.backgroundImage = `url('https://images.unsplash.com/photo-1551016028-1b292e071720?q=80&w=1000&auto=format&fit=crop')`;
+            imagePreview.classList.remove('hidden');
+            uploadPlaceholder.classList.add('hidden');
+            removeImageBtn.classList.remove('hidden');
         });
     }
 
@@ -95,8 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if (!imageInput.files || imageInput.files.length === 0) {
-            F3Toast.warning('Please upload a crop image to enable the AI diagnosis.');
+        const hasImageFile = imageInput.files && imageInput.files.length > 0;
+        const hasPreviewImage = imagePreview.style.backgroundImage && imagePreview.style.backgroundImage !== 'none';
+        
+        if (!hasImageFile && !hasPreviewImage) {
+            F3Toast.warning('Please upload a crop image or load a demo case to enable the AI diagnosis.');
             return;
         }
 
@@ -117,6 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const oldText = btn.innerHTML;
         btn.innerHTML = `<div class="flex items-center gap-3"><div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Determining Pathology...</div>`;
         btn.disabled = true;
+
+        // Show Results Skeleton Immediately
+        results.classList.remove('hidden');
+        setTimeout(() => {
+            results.classList.remove('opacity-0', 'translate-y-10');
+            results.classList.add('opacity-100', 'translate-y-0');
+            window.scrollTo({ top: results.offsetTop - 100, behavior: 'smooth' });
+        }, 50);
 
         try {
             const prompt = `You are an elite plant pathologist AI. Perform a multi-stage diagnostic analysis based on these parameters:
@@ -155,31 +172,41 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const rawData = await response.json();
+            
+            if (rawData.error) {
+                throw new Error(rawData.message || rawData.error);
+            }
+
             const data = rawData.result;
+            if (!data) {
+                throw new Error("Empty diagnostic result");
+            }
 
             // Populate Results with "Scanning" feel
-            resName.textContent = data.diseaseName;
-            resScience.textContent = data.scientificName;
-            resClass.textContent = data.classification;
-            resSeverity.textContent = data.severity;
-            resSpread.textContent = data.spread;
-            resConf.textContent = data.confidence;
-            resLoss.textContent = data.lossRisk;
+            if (resName) resName.textContent = data.diseaseName || 'Unknown Pathology';
+            if (resScience) resScience.textContent = data.scientificName || 'N/A';
+            if (resClass) resClass.textContent = data.classification || 'Unclassified';
+            if (resSeverity) resSeverity.textContent = data.severity || 'Monitoring';
+            if (resSpread) resSpread.textContent = data.spread || 'N/A';
+            if (resConf) resConf.textContent = data.confidence || '--';
+            if (resLoss) resLoss.textContent = data.lossRisk || '--';
 
-            resSymptoms.innerHTML = data.symptoms.map(s => `
-                <li class="flex items-center gap-3 text-slate-600 dark:text-slate-400">
-                    <div class="w-1.5 h-1.5 rounded-full bg-agri-gold"></div>
-                    ${s}
-                </li>
-            `).join('');
+            if (resSymptoms && data.symptoms) {
+                resSymptoms.innerHTML = data.symptoms.map(s => `
+                    <li class="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                        <div class="w-1.5 h-1.5 rounded-full bg-agri-gold"></div>
+                        ${s}
+                    </li>
+                `).join('');
+            }
 
-            actImm.textContent = data.immediateAction;
-            actChem.textContent = data.chemicalTreatment;
-            actOrg.textContent = data.organicAlternative;
-            actWater.textContent = data.soilWater;
-            actPrev.textContent = data.prevention;
-            actFollow.textContent = data.followUp;
-            actWeather.textContent = data.weatherAdvice;
+            if (actImm) actImm.textContent = data.immediateAction || 'Manual inspection required.';
+            if (actChem) actChem.textContent = data.chemicalTreatment || 'Consult local advisor.';
+            if (actOrg) actOrg.textContent = data.organicAlternative || 'N/A';
+            if (actWater) actWater.textContent = data.soilWater || 'N/A';
+            if (actPrev) actPrev.textContent = data.prevention || 'N/A';
+            if (actFollow) actFollow.textContent = data.followUp || 'Weekly scouting.';
+            if (actWeather) actWeather.textContent = data.weatherAdvice || 'Monitor forecasts.';
 
             // Apply Premium Status Styling
             resSeverity.className = `px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${
@@ -197,7 +224,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error("Diagnostic Error:", error);
-            F3Toast.error('AI Diagnostic Engine failed. Please try again.');
+            F3Toast.error(`AI Engine Error: ${error.message}`);
+            // Hide results if they are empty
+            if (!resName.textContent || resName.textContent === 'Corn Smut') {
+                results.classList.add('hidden');
+            }
         } finally {
             btn.innerHTML = oldText;
             btn.disabled = false;

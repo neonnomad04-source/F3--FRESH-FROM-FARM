@@ -140,6 +140,18 @@
                             <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Soil Matrix</label>
                             <input type="text" id="param-soil" placeholder="e.g. Loamy/Clay" required class="input-field">
                         </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Irrigation</label>
+                            <input type="text" id="param-irrigation" placeholder="e.g. Drip" required class="input-field">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Fertilizer Used</label>
+                            <input type="text" id="param-fert" placeholder="e.g. Urea" required class="input-field">
+                        </div>
+                        <div class="space-y-2 col-span-2">
+                            <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Pest Control Used</label>
+                            <input type="text" id="param-pest" placeholder="e.g. Neem Oil" required class="input-field">
+                        </div>
                     </div>
 
                     <button type="submit" class="w-full py-6 bg-agri-dark text-white rounded-3xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95">
@@ -163,6 +175,7 @@
                             <div class="flex flex-wrap gap-3">
                                 <span id="res-class" class="px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-500">Classification</span>
                                 <span id="res-severity" class="px-3 py-1 bg-red-50 text-red-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Severe</span>
+                                <span id="res-spread" class="px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-400 italic">Localized</span>
                             </div>
                             <div>
                                 <h3 id="res-name" class="text-5xl font-black text-slate-900 dark:text-white leading-none tracking-tighter mb-2">Corn Smut</h3>
@@ -198,16 +211,18 @@
                         <p class="text-[10px] font-black uppercase tracking-widest text-agri-gold mb-4">Eco-Friendly Path</p>
                         <p id="act-org" class="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed"></p>
                     </div>
+                    <div class="premium-card !p-8 border-l-4 border-l-blue-500">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-blue-500 mb-4">Water & Soil Protocol</p>
+                        <p id="act-water" class="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+                    </div>
+                    <div class="premium-card !p-8">
+                        <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Atmospheric Mitigation</p>
+                        <p id="act-weather" class="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed"></p>
+                    </div>
                     <div class="premium-card !p-8 md:col-span-2">
-                        <div class="grid grid-cols-2 gap-8">
-                            <div class="space-y-4">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Chemical Protocol</p>
-                                <p id="act-chem" class="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed"></p>
-                            </div>
-                            <div class="space-y-4">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Atmospheric Mitigation</p>
-                                <p id="act-weather" class="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed"></p>
-                            </div>
+                        <div class="space-y-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Chemical Protocol</p>
+                            <p id="act-chem" class="text-sm font-bold text-slate-700 dark:text-slate-300 leading-relaxed"></p>
                         </div>
                     </div>
                 </div>
@@ -247,6 +262,11 @@
     </footer>
 
     <!-- Scripts -->
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <script src="./js/components/ui.js"></script>
     <script src="./js/components/sidebar.js"></script>
     <script src="./js/common.js"></script>

@@ -78,7 +78,10 @@ function switchLanguage() {
     setTimeout(() => {
         applyTranslations(next);
         document.documentElement.lang = next;
-        document.getElementById('lang-btn-text').textContent = next === 'en' ? 'हिन्दी' : 'English';
+        const langBtnText = document.getElementById('lang-btn-text');
+        if (langBtnText) {
+            langBtnText.textContent = next === 'en' ? 'हिन्दी' : 'English';
+        }
         localStorage.setItem('F3_lang', next);
         document.body.style.opacity = '1';
     }, 300);
@@ -103,7 +106,10 @@ function applyTranslations(lang) {
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('F3_lang') || 'en';
     applyTranslations(savedLang);
-    document.getElementById('lang-btn-text').textContent = savedLang === 'en' ? 'हिन्दी' : 'English';
+    const langBtnText = document.getElementById('lang-btn-text');
+    if (langBtnText) {
+        langBtnText.textContent = savedLang === 'en' ? 'हिन्दी' : 'English';
+    }
     document.body.style.transition = 'opacity 0.4s ease';
 });
 

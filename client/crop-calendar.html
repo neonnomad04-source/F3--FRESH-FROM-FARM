@@ -78,6 +78,21 @@
             border: 4px solid #2B1B0E;
             box-shadow: 0 4px 12px rgba(212,160,23,0.4);
         }
+        .risk-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .risk-fill {
+            height: 100%;
+            background: #D4A017;
+            transition: width 1s ease-out;
+        }
+        .alert-urgent { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .alert-upcoming { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); }
+        .alert-done { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); }
     </style>
 </head>
 
@@ -123,13 +138,13 @@
                     <form id="calendar-form" class="space-y-8">
                         <div class="space-y-4">
                             <label class="calendar-label">Location Node</label>
-                            <input type="text" id="cal-location" placeholder="e.g. Lucknow, UP" class="calendar-input">
+                            <input type="text" id="cal-location" placeholder="e.g. Lucknow, UP" class="calendar-input" required>
                         </div>
 
                         <div class="grid grid-cols-2 gap-6">
                             <div>
                                 <label class="calendar-label">Crop Spec</label>
-                                <input list="cal-crop-opts" id="cal-crop" placeholder="Rice" class="calendar-input">
+                                <input list="cal-crop-opts" id="cal-crop" placeholder="Rice" class="calendar-input" required>
                                 <datalist id="cal-crop-opts">
                                     <option value="Rice"></option><option value="Wheat"></option><option value="Cotton"></option><option value="Tomato"></option>
                                 </datalist>
@@ -146,7 +161,7 @@
 
                         <div class="space-y-4">
                             <label class="calendar-label">Sowing Horizon</label>
-                            <input type="date" id="cal-date" class="calendar-input">
+                            <input type="date" id="cal-date" class="calendar-input" required>
                         </div>
 
                         <div class="space-y-4">
@@ -161,6 +176,15 @@
                                     <span class="text-sm font-black uppercase tracking-widest">Rain-fed</span>
                                 </label>
                             </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label class="calendar-label">Farming Scale</label>
+                            <select id="cal-scale" class="calendar-input appearance-none">
+                                <option value="Small (< 2 acres)">Small (&lt; 2 acres)</option>
+                                <option value="Medium (2-10 acres)">Medium (2-10 acres)</option>
+                                <option value="Large (> 10 acres)">Large (&gt; 10 acres)</option>
+                            </select>
                         </div>
 
                         <button type="submit" id="generate-btn" class="w-full py-6 bg-agri-dark text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95">
@@ -188,22 +212,50 @@
                                     <p id="weather-humidity" class="text-5xl font-black tracking-tighter">--</p>
                                     <p class="text-[10px] font-black text-white/40 uppercase tracking-widest mt-2">Moisture</p>
                                 </div>
+                                <div class="text-center">
+                                    <p id="weather-rain" class="text-5xl font-black tracking-tighter">--</p>
+                                    <p class="text-[10px] font-black text-white/40 uppercase tracking-widest mt-2">Rain</p>
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Alerts Feed -->
+                    <div id="alerts-container" class="space-y-4">
+                        <!-- JS Injection -->
                     </div>
 
                     <!-- Risk Analysis -->
                     <div class="premium-card p-10 space-y-8">
                         <h4 class="text-sm font-black uppercase tracking-widest text-slate-400">Environmental Risk Metrics</h4>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-8" id="risk-dashboard">
-                            <!-- JS Injection -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-8">
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Flood</p>
+                                <p id="risk-flood-label" class="text-lg font-black text-slate-800 dark:text-white">Low</p>
+                                <div class="risk-bar"><div id="risk-flood" class="risk-fill" style="width: 0%"></div></div>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Heat</p>
+                                <p id="risk-heat-label" class="text-lg font-black text-slate-800 dark:text-white">Low</p>
+                                <div class="risk-bar"><div id="risk-heat" class="risk-fill" style="width: 0%"></div></div>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Pest</p>
+                                <p id="risk-pest-label" class="text-lg font-black text-slate-800 dark:text-white">Low</p>
+                                <div class="risk-bar"><div id="risk-pest" class="risk-fill" style="width: 0%"></div></div>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Drought</p>
+                                <p id="risk-drought-label" class="text-lg font-black text-slate-800 dark:text-white">Low</p>
+                                <div class="risk-bar"><div id="risk-drought" class="risk-fill" style="width: 0%"></div></div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Growth Timeline -->
                     <div class="premium-card p-12 space-y-12">
                         <h4 class="text-2xl font-black tracking-tighter">Growth Optimization Timeline</h4>
-                        <div id="timeline-container" class="space-y-0">
+                        <div id="timeline-container" class="space-y-4">
                             <!-- timeline-step elements injected here -->
                         </div>
                     </div>
@@ -218,16 +270,26 @@
                             <p id="post-harvest" class="text-sm font-medium text-slate-500 leading-relaxed">AI is synthesizing post-harvest protocols and storage logistics optimization...</p>
                         </div>
                     </div>
+
+                    <div class="flex justify-center pt-8">
+                        <button id="reset-cal-btn" class="px-10 py-5 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-50 transition-all">
+                            ← Start New Plan
+                        </button>
+                    </div>
                 </div>
             </div>
 
         </div>
     </main>
 
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <script src="./js/components/ui.js"></script>
     <script src="./js/components/sidebar.js"></script>
     <script src="./js/common.js"></script>
     <script src="./js/crop-calendar.js"></script>
 </body>
-
 </html>

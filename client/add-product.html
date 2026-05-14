@@ -236,7 +236,7 @@
                 });
 
                 alert('🔥 Success! Your product is now live on the Firebase Network.');
-                window.location.href = 'portal.html';
+                window.location.href = 'index.html';
             } catch (err) {
                 console.error('Firebase Direct Error:', err);
                 alert(`Permission Denied! Have you updated your Firestore rules to 'allow read, write: if true;'? \n\nDetails: ${err.message}`);

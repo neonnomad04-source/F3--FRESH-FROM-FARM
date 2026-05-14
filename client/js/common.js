@@ -8,9 +8,40 @@ const firebaseConfig = {
     appId: "1:826412688061:web:60e88600378518b7688dd4"
 };
 
+// Initialize Firebase if the SDK is loaded
+if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     applyRoleBasedNavigation();
     initTheme();
+    
+    // Global Auth State Observer for Sidebar/UI
+    if (typeof firebase !== 'undefined') {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                localStorage.setItem('userEmail', user.email);
+                // We might need to fetch the role from Firestore if it's not in localStorage
+                if (!localStorage.getItem('userRole')) {
+                    firebase.firestore().collection('users').doc(user.uid).get().then(doc => {
+                        if (doc.exists && doc.data().role) {
+                            localStorage.setItem('userRole', doc.data().role);
+                            applyRoleBasedNavigation();
+                        }
+                    });
+                }
+            } else {
+                // Not clearing localStorage here because we might want to keep the role for UI hints
+                // but we should clear the email
+                localStorage.removeItem('userEmail');
+            }
+            // Re-apply navigation whenever auth state changes
+            applyRoleBasedNavigation();
+        });
+    }
 });
 
 function initTheme() {
@@ -46,8 +77,6 @@ function applyRoleBasedNavigation() {
     const savedRole = localStorage.getItem('userRole');
     const currentRole = (savedRole || 'Member').toLowerCase();
     
-    console.log('Applying navigation for role:', currentRole);
-    
     document.querySelectorAll('[data-role-req]').forEach(el => {
         const reqRole = el.getAttribute('data-role-req').toLowerCase();
         if (reqRole === currentRole) {
@@ -68,5 +97,10 @@ function applyRoleBasedNavigation() {
     const emailDisplay = document.getElementById('user-email');
     if (emailDisplay) {
         emailDisplay.textContent = localStorage.getItem('userEmail') || '';
+    }
+    
+    // Trigger sidebar re-render if it exists
+    if (window.F3Sidebar && typeof F3Sidebar.refresh === 'function') {
+        F3Sidebar.refresh();
     }
 }

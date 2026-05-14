@@ -21,10 +21,11 @@ router.post('/groq', async (req, res) => {
                 'Authorization': `Bearer ${GROQ_API_KEY}`
             },
             body: JSON.stringify({
-                model,
+                model: model === "llama-3.3-70b-versatile" ? "llama-3.1-8b-instant" : model,
+                max_tokens: 1500,
                 ...(jsonMode && { response_format: { type: "json_object" } }),
                 messages: [
-                    { role: "system", content: jsonMode ? "You output JSON strictly." : "You are a helpful agricultural assistant." },
+                    { role: "system", content: jsonMode ? "You output concise JSON strictly. Be brief but accurate." : "You are a helpful agricultural assistant." },
                     { role: "user", content: prompt }
                 ]
             })
@@ -41,7 +42,26 @@ router.post('/groq', async (req, res) => {
 
         if (!content) return res.status(500).json({ error: 'Empty response from Groq' });
 
-        res.json({ result: jsonMode ? JSON.parse(content) : content });
+        if (jsonMode) {
+            try {
+                // Try direct parse first
+                res.json({ result: JSON.parse(content) });
+            } catch (e) {
+                // Fallback: Extract JSON from markdown or text blocks
+                const jsonMatch = content.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    try {
+                        res.json({ result: JSON.parse(jsonMatch[0]) });
+                    } catch (e2) {
+                        res.status(500).json({ error: 'AI returned invalid JSON structure', details: content });
+                    }
+                } else {
+                    res.status(500).json({ error: 'AI did not return a JSON object', details: content });
+                }
+            }
+        } else {
+            res.json({ result: content });
+        }
 
     } catch (err) {
         console.error('AI route error:', err);

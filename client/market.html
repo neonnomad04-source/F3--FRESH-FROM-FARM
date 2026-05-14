@@ -229,11 +229,11 @@
     <!-- Multi-Step Checkout Modal -->
     <div id="checkout-modal" class="fixed inset-0 z-[250] hidden">
         <div class="fixed inset-0 bg-black/80 backdrop-blur-3xl" onclick="toggleCheckoutModal()"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-8 pointer-events-none">
-            <div class="bg-white dark:bg-slate-900 rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] w-full max-w-2xl p-16 relative pointer-events-auto animate-slide-up border border-white/10">
+        <div class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
+            <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] w-full max-w-md p-10 relative pointer-events-auto animate-slide-up border border-white/10">
                 
                 <!-- Progress Header -->
-                <div class="flex items-center gap-6 mb-16">
+                <div class="flex items-center gap-4 mb-10">
                     <div id="step-indicator-1" class="step-bubble step-bubble-active">01</div>
                     <div class="flex-1 h-2 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden p-0.5">
                         <div id="step-progress-bar" class="w-0 h-full bg-gradient-to-r from-agri-gold to-agri-secondary rounded-full transition-all duration-700 shadow-[0_0_15px_rgba(212,160,23,0.5)]"></div>
@@ -244,28 +244,28 @@
                 <!-- Step 1: Logistics -->
                 <div id="checkout-step-1" class="animate-fade-in space-y-12">
                     <div class="space-y-4">
-                        <h3 class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">Logistics <br><span class="gradient-text">Matrix</span></h3>
-                        <p class="text-slate-500 font-medium text-lg">Initialize your delivery coordinates for precision fulfillment.</p>
+                        <h3 class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter leading-tight">Logistics <br><span class="gradient-text">Matrix</span></h3>
+                        <p class="text-slate-500 font-medium text-sm">Fulfillment coordinates.</p>
                     </div>
                     
                     <div class="space-y-8">
                         <div class="space-y-4">
                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-agri-gold ml-4">Communication Protocol</label>
                             <div class="relative group">
-                                <input type="tel" id="ship-phone" placeholder="+91" class="w-full px-8 py-6 rounded-[2.5rem] bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none focus:border-agri-gold transition-all font-bold text-lg shadow-inner">
+                                <input type="tel" id="ship-phone" placeholder="+91" class="w-full px-6 py-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none focus:border-agri-gold transition-all font-bold text-sm shadow-inner">
                                 <div class="absolute right-8 top-1/2 -translate-y-1/2 text-slate-300">📞</div>
                             </div>
                         </div>
                         <div class="space-y-4">
                             <label class="text-[10px] font-black uppercase tracking-[0.3em] text-agri-gold ml-4">Geographic Node</label>
                             <div class="relative group">
-                                <textarea id="ship-address" rows="3" placeholder="Enter delivery address..." class="w-full px-8 py-6 rounded-[3rem] bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none focus:border-agri-gold transition-all font-bold text-lg resize-none shadow-inner"></textarea>
+                                <textarea id="ship-address" rows="2" placeholder="Enter delivery address..." class="w-full px-6 py-4 rounded-[1.5rem] bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 outline-none focus:border-agri-gold transition-all font-bold text-sm resize-none shadow-inner"></textarea>
                                 <div class="absolute right-8 top-8 text-slate-300">📍</div>
                             </div>
                         </div>
                     </div>
 
-                    <button onclick="gotoCheckoutStep(2)" class="w-full py-8 bg-agri-dark text-white rounded-[2.5rem] font-black text-sm uppercase tracking-[0.4em] shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95 group flex items-center justify-center gap-4">
+                    <button onclick="gotoCheckoutStep(2)" class="w-full py-5 bg-agri-dark text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl transition-all transform hover:scale-[1.02] active:scale-95 group flex items-center justify-center gap-4">
                         Proceed to Settlement
                         <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </button>
